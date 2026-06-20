@@ -5,6 +5,7 @@ public class FungusBridge : MonoBehaviour
 {
     public static FungusBridge Instance { get; private set; }
     [SerializeField] private GameManager gameManager;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -14,30 +15,38 @@ public class FungusBridge : MonoBehaviour
         }
         Instance = this;
     }
+
     void OnEnable()
     {
         BlockSignals.OnBlockStart += HandleBlockStart;
         BlockSignals.OnBlockEnd += HandleBlockEnd;
     }
+
     void OnDisable()
     {
         BlockSignals.OnBlockStart -= HandleBlockStart;
         BlockSignals.OnBlockEnd -= HandleBlockEnd;
     }
+
     public void TriggerFlowchartBlock(Flowchart flowchart, string blockName)
     {
         if (flowchart == null) return;
         flowchart.ExecuteBlock(blockName);
     }
+
     void HandleBlockStart(Block block)
     {
         if (gameManager == null) return;
-        gameManager.SetState(GameState.Dialogue);
+
+        bool isCutscene = block.BlockName.StartsWith("CS_");
+        gameManager.SetState(isCutscene ? GameState.Cutscene : GameState.Dialogue);
         GameEvents.RaiseDialogueStarted();
     }
+
     void HandleBlockEnd(Block block)
     {
         if (gameManager == null) return;
+        
         gameManager.SetState(GameState.Exploring);
         GameEvents.RaiseDialogueFinished();
     }

@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 713747428}
   - component: {fileID: 713747427}
   - component: {fileID: 713747426}
+  - component: {fileID: 713747429}
   m_Layer: 0
   m_Name: '[Managers]'
   m_TagString: Player
@@ -162,6 +163,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1466d52cb85a18843a7fcd848689a4cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  initialScene: Village
+  defaultPlayerCharacter: {fileID: 11400000, guid: 738157201f895314c8d9b933437a3eae, type: 2}
+  battleSceneName: Battle
 --- !u!4 &713747428
 Transform:
   m_ObjectHideFlags: 0
@@ -177,6 +181,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &713747429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713747425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb51f799b3d8514db2ad79d24e45896, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameFlowCommands
+  gameManager: {fileID: 713747427}
+  forestWolfEncounter: {fileID: 11400000, guid: a944899c69114ed4590d5134262837d9, type: 2}
 --- !u!1 &1361162276
 GameObject:
   m_ObjectHideFlags: 0

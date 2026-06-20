@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class BillboardSprite : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Transform cam;
+
+    private void Start() 
     {
-        
+        cam = Camera.main.transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void LateUpdate() 
     {
-        
+        if (cam == null) return;
+
+        Vector3 direction = cam.position - transform.position;
+        direction.y = 0;
+        if (direction.sqrMagnitude < 0.001f) return;
+
+        transform.rotation = Quaternion.LookRotation(direction);
     }
 }
