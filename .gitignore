@@ -1,0 +1,12 @@
+
+Library/*
+Temp/*
+Logs/*
+
+vocab.json
+.vsconfig
+*.sln
+/Library/*
+*.onnx
+*.onnx.meta
+*.sentis
