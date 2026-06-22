@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputHandler))]
+[RequireComponent(typeof(InteractionDetector))]
 public class PlayerController : MonoBehaviour
 {
     public enum PlayerState
@@ -25,13 +26,25 @@ public class PlayerController : MonoBehaviour
 
     CharacterController characterController;
     PlayerInputHandler inputHandler;
+    InteractionDetector interactionDetector;
     Vector3 velocity;
     Vector3 lastMoveDirection;
+
+    void OnEnable()
+    {
+        GameEvents.OnDialogueFinished += HandleDialogueFinished;
+    }
+
+    void OnDisable()
+    {
+        GameEvents.OnDialogueFinished -= HandleDialogueFinished;
+    }
 
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
         inputHandler = GetComponent<PlayerInputHandler>();
+        interactionDetector = GetComponent<InteractionDetector>();
 
         if (characterVisual == null)
             characterVisual = GetComponent<CharacterVisual>();
@@ -40,10 +53,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         SyncStateFromGameManager();
-        if (!CanProcessGameplayInput()) return;
+        if (!CanProcessGameplayInput())
+        {
+            inputHandler.ConsumeInteract();
+            return;
+        }
 
         HandleMovement();
-        // INTERACT - FASE 4
+        HandleInteraction();
     }
     void HandleMovement()
     {
@@ -90,7 +107,8 @@ public class PlayerController : MonoBehaviour
             case GameState.Exploring:
             case GameState.Paused:
                 if (CurrentPlayerState == PlayerState.Cutscene ||
-                    CurrentPlayerState == PlayerState.Battle)
+                    CurrentPlayerState == PlayerState.Battle ||
+                    CurrentPlayerState == PlayerState.Interact)
                     CurrentPlayerState = PlayerState.Idle;
                 break;
             case GameState.Dialogue:
@@ -101,6 +119,26 @@ public class PlayerController : MonoBehaviour
                 CurrentPlayerState = PlayerState.Battle;
                 break;
         }
+    }
+
+    void HandleDialogueFinished()
+    {
+        inputHandler.ConsumeInteract();
+    }
+
+    void HandleInteraction()
+    {
+        if (!inputHandler.InteractPressed)
+            return;
+
+        inputHandler.ConsumeInteract();
+
+        IInteractable target = interactionDetector.currentTarget;
+        if (target == null || !target.CanInteract(this))
+            return;
+
+        CurrentPlayerState = PlayerState.Interact;
+        target.Interact(this);
     }
 
     bool CanProcessGameplayInput()
