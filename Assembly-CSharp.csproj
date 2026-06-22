@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\Characters\CharacterRuntime.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Core\Data\CombatFormulaTest.cs" />
+    <Compile Include="Assets\Scripts\Characters\PlayerInputHandler.cs" />
     <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillTargetType.cs" />
     <Compile Include="Assets\Scripts\Core\BattleSessionData.cs" />
@@ -84,6 +85,12 @@
     <Compile Include="Assets\Scripts\Core\Data\CharacterData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\EnemyData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillCategory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Art\2D\Characters\KayKit_Character_Animations_1.1\License.txt" />
+    <None Include="Assets\Art\3D\Environment\KayKit_Forest_Nature_Pack_1.0_FREE\License.txt" />
+    <None Include="Assets\Art\2D\Characters\KayKit_Adventurers_2.0_FREE\License.txt" />
+    <None Include="Assets\Art\3D\Environment\Stylized Nature MegaKit[Standard]\License_Standard.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -1198,8 +1205,8 @@
     <ProjectReference Include="Unity.Multiplayer.Center.Editor.csproj" />
     <ProjectReference Include="Unity.RenderPipelines.Universal.Runtime.csproj" />
     <ProjectReference Include="Unity.VisualScripting.State.csproj" />
-    <ProjectReference Include="Unity.RenderPipelines.Universal.Config.Runtime.csproj" />
     <ProjectReference Include="Fungus.UsfxrEditor.csproj" />
+    <ProjectReference Include="Unity.RenderPipelines.Universal.Config.Runtime.csproj" />
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj" />
     <ProjectReference Include="Unity.Collections.Editor.csproj" />
     <ProjectReference Include="Unity.ShaderGraph.Editor.csproj" />

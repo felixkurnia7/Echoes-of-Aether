@@ -3,34 +3,41 @@ using UnityEngine;
 public class CharacterVisual : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Transform modelTransform;
 
     private static readonly int MoveX = Animator.StringToHash("MoveX");
     private static readonly int MoveY = Animator.StringToHash("MoveY");
     private static readonly int Speed = Animator.StringToHash("Speed");
     private static readonly int IsMoving = Animator.StringToHash("IsMoving");
 
-    private void Awake() 
+    void Awake()
     {
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
+        if (modelTransform == null)
+            modelTransform = transform;
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
     }
 
-    public void SetMovement(Vector3 wordlDirection, float speed)
+    public void SetMovement(Vector3 worldDirection, float speed)
     {
-        bool moving = wordlDirection.magnitude > 0.01f;
+        bool moving = speed > 0.01f;
 
-        if (moving)
+        if (moving && worldDirection.sqrMagnitude > 0.01f)
         {
-            if (wordlDirection.x < -0.01f)
-                spriteRenderer.flipX = true;
-            else if (wordlDirection.x > 0.01f)
-                spriteRenderer.flipX = false;
-
-            Vector3 animatorDirection = wordlDirection.normalized;
-            animator.SetFloat(MoveX, animatorDirection.x);
-            animator.SetFloat(MoveY, animatorDirection.z);
+            Quaternion targetRot = Quaternion.LookRotation(worldDirection);
+            modelTransform.rotation = Quaternion.Slerp(
+                modelTransform.rotation, targetRot, Time.deltaTime * 12f);
+            Vector3 animDir = worldDirection.normalized;
+            animator.SetFloat(MoveX, animDir.x);
+            animator.SetFloat(MoveY, animDir.z);
             animator.SetFloat(Speed, speed);
+        }
+        else
+        {
+            animator.SetFloat(MoveX, 0f);
+            animator.SetFloat(MoveY, 0f);
+            animator.SetFloat(Speed, 0f);
         }
 
         animator.SetBool(IsMoving, moving);
