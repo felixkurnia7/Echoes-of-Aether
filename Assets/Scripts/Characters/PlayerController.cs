@@ -14,10 +14,20 @@ public class PlayerController : MonoBehaviour
         Battle
     }
 
+    public enum MovementMode
+    {
+        World,
+        CameraRelative,
+        ReferenceTransform
+    }
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float gravity = -20f;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private MovementMode movementMode = MovementMode.ReferenceTransform;
+    [Tooltip("Stable basis for side-view input. Assign CameraRig_SideView when using a camera path.")]
+    [SerializeField] private Transform movementReference;
 
     [Header("References")]
     [SerializeField] private CharacterVisual characterVisual;
@@ -48,6 +58,9 @@ public class PlayerController : MonoBehaviour
 
         if (characterVisual == null)
             characterVisual = GetComponent<CharacterVisual>();
+
+        if (movementReference == null && movementMode == MovementMode.ReferenceTransform)
+            movementReference = FindFirstObjectByType<EchoesOfAether.Camera.CameraPathFollowerRig>()?.transform;
     }
 
     void Update()
@@ -65,7 +78,7 @@ public class PlayerController : MonoBehaviour
     void HandleMovement()
     {
         Vector2 input = inputHandler.MoveInput;
-        Vector3 direction = new Vector3(input.x, 0f, input.y);
+        Vector3 direction = GetMoveDirection(input);
 
         if (direction.sqrMagnitude > 1f)
             direction.Normalize();
@@ -87,6 +100,61 @@ public class PlayerController : MonoBehaviour
 
         if (characterVisual != null)
             characterVisual.SetMovement(direction, IsMoving ? moveSpeed : 0f);
+    }
+
+    Vector3 GetMoveDirection(Vector2 input)
+    {
+        switch (movementMode)
+        {
+            case MovementMode.CameraRelative:
+                return GetCameraRelativeDirection(input);
+
+            case MovementMode.ReferenceTransform:
+                if (movementReference != null)
+                    return GetReferenceRelativeDirection(input, movementReference);
+                return GetCameraRelativeDirection(input);
+
+            default:
+                return new Vector3(input.x, 0f, input.y);
+        }
+    }
+
+    static Vector3 GetCameraRelativeDirection(Vector2 input)
+    {
+        var cam = UnityEngine.Camera.main;
+        if (cam == null)
+            return new Vector3(input.x, 0f, input.y);
+
+        var forward = cam.transform.forward;
+        var right = cam.transform.right;
+        forward.y = 0f;
+        right.y = 0f;
+
+        if (forward.sqrMagnitude < 0.0001f || right.sqrMagnitude < 0.0001f)
+            return new Vector3(input.x, 0f, input.y);
+
+        forward.Normalize();
+        right.Normalize();
+
+        var direction = right * input.x + forward * input.y;
+        return direction.sqrMagnitude > 1f ? direction.normalized : direction;
+    }
+
+    static Vector3 GetReferenceRelativeDirection(Vector2 input, Transform reference)
+    {
+        var forward = reference.forward;
+        var right = reference.right;
+        forward.y = 0f;
+        right.y = 0f;
+
+        if (forward.sqrMagnitude < 0.0001f || right.sqrMagnitude < 0.0001f)
+            return new Vector3(input.x, 0f, input.y);
+
+        forward.Normalize();
+        right.Normalize();
+
+        var direction = right * input.x + forward * input.y;
+        return direction.sqrMagnitude > 1f ? direction.normalized : direction;
     }
 
     void ApplyGravity()

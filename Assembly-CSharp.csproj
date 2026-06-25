@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Characters\PlayerInputHandler.cs" />
     <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillTargetType.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraPath\CameraPathFollowerRig.cs" />
     <Compile Include="Assets\Scripts\Core\BattleSessionData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillData.cs" />
     <Compile Include="Assets\Scripts\Core\BootstrapTest.cs" />
@@ -83,12 +84,14 @@
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PT_MouseLook.cs" />
     <Compile Include="Assets\Scripts\Rendering\CharacterVisual.cs" />
     <Compile Include="Assets\Scripts\Integration\CallGameFlow.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraPath\CameraPath.cs" />
     <Compile Include="Assets\Scripts\Rendering\BillboardSprite.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerController.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PT_PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Interaction\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\Interaction\WorldInteractable.cs" />
+    <Compile Include="Assets\Scripts\Camera\CinemachineCameraCollisionChecker.cs" />
     <Compile Include="Assets\Scripts\Core\Data\CharacterData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\EnemyData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillCategory.cs" />

@@ -12,11 +12,14 @@ public class CharacterVisual : MonoBehaviour
 
     void Awake()
     {
-        if (modelTransform == null)
-            modelTransform = transform;
-
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+
+        if (modelTransform == null)
+        {
+            var model = transform.Find("Model");
+            modelTransform = model != null ? model : transform;
+        }
     }
 
     public void SetMovement(Vector3 worldDirection, float speed)

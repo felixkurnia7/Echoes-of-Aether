@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\Polytope Studio\Welcome_Screen\Editor\PT_Welcome_Screen.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraPath\Editor\CameraPathEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\PackageCache\com.unity.collab-proxy@e566cd3e7623\Lib\Editor\Localization\cm-help.zh-Hans.txt" />
