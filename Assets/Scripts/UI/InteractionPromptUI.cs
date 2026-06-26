@@ -9,8 +9,13 @@ public class InteractionPromptUI : MonoBehaviour
     [SerializeField] private PlayerController player;
     [SerializeField] private GameObject promptRoot;
     [SerializeField] private TMP_Text promptLabel;
-    [SerializeField] private string interactKeyLabel = "Space";
     [SerializeField] private bool createRuntimeUIIfMissing = true;
+
+    [Header("Billboard")]
+    [Tooltip("Rotate the prompt to always face the camera. Only has a visible effect for a World Space canvas.")]
+    [SerializeField] private bool faceCamera = true;
+
+    private Camera targetCamera;
 
     void Awake()
     {
@@ -29,6 +34,27 @@ public class InteractionPromptUI : MonoBehaviour
     void Update()
     {
         Refresh();
+    }
+
+    void LateUpdate()
+    {
+        if (!faceCamera || promptRoot == null || !promptRoot.activeSelf)
+            return;
+
+        Camera cam = GetCamera();
+        if (cam == null)
+            return;
+
+        // Align the prompt with the camera plane so it stays readable and upright.
+        promptRoot.transform.forward = cam.transform.forward;
+    }
+
+    Camera GetCamera()
+    {
+        if (targetCamera == null)
+            targetCamera = Camera.main;
+
+        return targetCamera;
     }
 
     void Refresh()
@@ -63,7 +89,7 @@ public class InteractionPromptUI : MonoBehaviour
         promptRoot.SetActive(true);
 
         if (promptLabel != null)
-            promptLabel.text = $"[{interactKeyLabel}] {actionText}";
+            promptLabel.text = actionText;
     }
 
     void Hide()

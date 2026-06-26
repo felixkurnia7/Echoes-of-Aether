@@ -29,6 +29,12 @@ namespace EchoesOfAether.Camera
         [Header("Orientation")]
         [Tooltip("Align rig forward to the path tangent. Used as a stable movement reference for the player.")]
         [SerializeField] private bool alignRotationToPath = true;
+        [Tooltip("How quickly the rig rotation eases toward the path tangent. Higher = snappier, lower = smoother. 0 = instant snap (can feel jerky at corners).")]
+        [SerializeField, Min(0f)] private float rotationSmoothing = 6f;
+
+        [Header("Advanced")]
+        [Tooltip("Rebuild the path cache every frame. Only needed if waypoints move at runtime.")]
+        [SerializeField] private bool rebuildEveryFrame = false;
 
         [Header("Debug")]
         [SerializeField] private bool drawGizmos = true;
@@ -40,14 +46,18 @@ namespace EchoesOfAether.Camera
         private void OnValidate()
         {
             moveSpeed = Mathf.Max(0f, moveSpeed);
+            rotationSmoothing = Mathf.Max(0f, rotationSmoothing);
         }
 
         private void Update()
         {
             if (path == null || player == null) return;
 
-            // Refresh cached points in case waypoints moved.
-            path.RebuildCache();
+            // Rebuild only when needed: every frame in edit mode (live preview),
+            // at runtime only if explicitly requested or the cache is empty.
+            if (!Application.isPlaying || rebuildEveryFrame || path.TotalLength <= 0.0001f)
+                path.RebuildCache();
+
             if (path.TotalLength <= 0.0001f) return;
 
             if (!path.TryGetClosestDistance(player.position, projection, out var desiredDistance))
@@ -57,6 +67,17 @@ namespace EchoesOfAether.Camera
             {
                 _currentDistance = desiredDistance;
                 _initialized = true;
+
+                var initialPos = path.EvaluateByDistance(_currentDistance) + worldOffset;
+                transform.position = initialPos;
+
+                if (alignRotationToPath)
+                {
+                    var initialTangent = path.EvaluateTangentByDistance(_currentDistance);
+                    if (initialTangent.sqrMagnitude > 0.0001f)
+                        transform.rotation = Quaternion.LookRotation(initialTangent, Vector3.up);
+                }
+                return;
             }
 
             if (moveSpeed > 0f)
@@ -71,7 +92,20 @@ namespace EchoesOfAether.Camera
             {
                 var tangent = path.EvaluateTangentByDistance(_currentDistance);
                 if (tangent.sqrMagnitude > 0.0001f)
-                    transform.rotation = Quaternion.LookRotation(tangent, Vector3.up);
+                {
+                    var targetRotation = Quaternion.LookRotation(tangent, Vector3.up);
+
+                    if (rotationSmoothing > 0f)
+                    {
+                        // Frame-rate independent smoothing so corners ease instead of snapping.
+                        float k = 1f - Mathf.Exp(-rotationSmoothing * Time.deltaTime);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, k);
+                    }
+                    else
+                    {
+                        transform.rotation = targetRotation;
+                    }
+                }
             }
         }
 

@@ -65,21 +65,28 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.8f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Managers\ObjectiveManager.cs" />
     <Compile Include="Assets\Scripts\Interaction\IInteractable.cs" />
+    <Compile Include="Assets\Scripts\UI\ObjectiveHUD.cs" />
+    <Compile Include="Assets\Scripts\Characters\NPCWalker.cs" />
     <Compile Include="Assets\Scripts\Characters\CharacterRuntime.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Core\Data\CombatFormulaTest.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerInputHandler.cs" />
+    <Compile Include="Assets\Scripts\Integration\ControlNpcCommand.cs" />
     <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillTargetType.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraPath\CameraPathFollowerRig.cs" />
     <Compile Include="Assets\Scripts\Core\BattleSessionData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillData.cs" />
+    <Compile Include="Assets\Scripts\Integration\SetObjectiveCommand.cs" />
     <Compile Include="Assets\Scripts\Core\BootstrapTest.cs" />
     <Compile Include="Assets\Scripts\Core\GameState.cs" />
+    <Compile Include="Assets\Scripts\UI\TutorialPopup.cs" />
     <Compile Include="Assets\Scripts\Integration\FungusBridge.cs" />
     <Compile Include="Assets\Scripts\Integration\GameFlowCommands.cs" />
     <Compile Include="Assets\Scripts\UI\InteractionPromptUI.cs" />
+    <Compile Include="Assets\Scripts\Integration\ShowTutorialPopupCommand.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PT_MouseLook.cs" />
     <Compile Include="Assets\Scripts\Rendering\CharacterVisual.cs" />
@@ -98,8 +105,10 @@
     <Compile Include="Assets\Scripts\Interaction\NPCInteractable.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Art\3D\Environment\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Village\Sources\Shaders\PT_Buildings_Glass_PBR.shader" />
+    <None Include="Assets\Art\3D\Environment\KayKit_ResourceBits_1.0_FREE\License.txt" />
     <None Include="Assets\Art\2D\Characters\KayKit_Character_Animations_1.1\License.txt" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Plants_Shader.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />

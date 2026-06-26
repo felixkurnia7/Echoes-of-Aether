@@ -436,6 +436,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7821855392171276779, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: initialScene
+      value: Forest_Road
+      objectReference: {fileID: 0}
     - target: {fileID: 8034713357759565040, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
