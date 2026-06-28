@@ -65,16 +65,26 @@ public class GameManager : MonoBehaviour
 
     public void StartBattle(EnemyData enemy)
     {
-        StartBattle(new[] { enemy });
+        StartBattle(new[] { enemy }, null);
+    }
+
+    public void StartBattle(EnemyData enemy, string victoryFlag)
+    {
+        StartBattle(new[] { enemy }, victoryFlag);
     }
 
     public void StartBattle(EnemyData[] enemies)
+    {
+        StartBattle(enemies, null);
+    }
+
+    public void StartBattle(EnemyData[] enemies, string victoryFlag)
     {
         if (enemies == null || enemies.Length == 0) return;
 
         string returnScene = SceneManager.GetActiveScene().name;
 
-        BattleSessionData.SetSession(defaultPlayerCharacter, enemies, returnScene);
+        BattleSessionData.SetSession(defaultPlayerCharacter, enemies, returnScene, victoryFlag);
         SetState(GameState.Battle);
         GameEvents.RaiseBattleStart();
         LoadScene(battleSceneName);
@@ -83,6 +93,10 @@ public class GameManager : MonoBehaviour
     public void EndBattle(bool victory)
     {
         string returnScene = BattleSessionData.ReturnSceneName;
+        string victoryFlag = BattleSessionData.VictoryFlag;
+
+        if (victory && !string.IsNullOrEmpty(victoryFlag))
+            SetStoryFlag(victoryFlag, true);
 
         BattleSessionData.Clear();
         SetState(GameState.Exploring);

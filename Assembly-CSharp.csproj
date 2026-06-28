@@ -68,9 +68,11 @@
     <Compile Include="Assets\Scripts\Managers\ObjectiveManager.cs" />
     <Compile Include="Assets\Scripts\Interaction\IInteractable.cs" />
     <Compile Include="Assets\Scripts\UI\ObjectiveHUD.cs" />
+    <Compile Include="Assets\Scripts\UI\SpeechBubbleFollower.cs" />
     <Compile Include="Assets\Scripts\Characters\NPCWalker.cs" />
     <Compile Include="Assets\Scripts\Characters\CharacterRuntime.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Characters\GroundAligner.cs" />
     <Compile Include="Assets\Scripts\Core\Data\CombatFormulaTest.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerInputHandler.cs" />
     <Compile Include="Assets\Scripts\Integration\ControlNpcCommand.cs" />
@@ -80,10 +82,12 @@
     <Compile Include="Assets\Scripts\Core\BattleSessionData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillData.cs" />
     <Compile Include="Assets\Scripts\Integration\SetObjectiveCommand.cs" />
+    <Compile Include="Assets\Scripts\UI\SpeechBubbleAnchor.cs" />
     <Compile Include="Assets\Scripts\Core\BootstrapTest.cs" />
     <Compile Include="Assets\Scripts\Core\GameState.cs" />
     <Compile Include="Assets\Scripts\UI\TutorialPopup.cs" />
     <Compile Include="Assets\Scripts\Integration\FungusBridge.cs" />
+    <Compile Include="Assets\Blink\Art\Animals\Stylized\Demo_Animals\DemoData\AnimationDemo.cs" />
     <Compile Include="Assets\Scripts\Integration\GameFlowCommands.cs" />
     <Compile Include="Assets\Scripts\UI\InteractionPromptUI.cs" />
     <Compile Include="Assets\Scripts\Integration\ShowTutorialPopupCommand.cs" />
@@ -91,10 +95,12 @@
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PT_MouseLook.cs" />
     <Compile Include="Assets\Scripts\Rendering\CharacterVisual.cs" />
     <Compile Include="Assets\Scripts\Integration\CallGameFlow.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraPath\CameraPath.cs" />
     <Compile Include="Assets\Scripts\Rendering\BillboardSprite.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Integration\StopIfStoryFlagCommand.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PT_PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Interaction\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\Interaction\WorldInteractable.cs" />
@@ -103,6 +109,7 @@
     <Compile Include="Assets\Scripts\Core\Data\EnemyData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillCategory.cs" />
     <Compile Include="Assets\Scripts\Interaction\NPCInteractable.cs" />
+    <Compile Include="Assets\Scripts\Integration\StartBattleCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\3D\Environment\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\License.txt" />

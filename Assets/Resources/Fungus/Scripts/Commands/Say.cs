@@ -53,6 +53,10 @@ namespace Fungus
 
         //add wait for vo that overrides stopvo
 
+        // --- Echoes of Aether customization ---
+        [Tooltip("Pick how this line is displayed: Default (normal box) or Bubble (floating above the speaker). No manual Say Dialog reference needed.")]
+        [SerializeField] protected SayBubbleStyle dialogStyle = SayBubbleStyle.Default;
+
         [Tooltip("Sets the active Say dialog with a reference to a Say Dialog object in the scene. All story text will now display using this Say Dialog.")]
         [SerializeField] protected SayDialog setSayDialog;
 
@@ -85,15 +89,25 @@ namespace Fungus
 
             executionCount++;
 
-            // Override the active say dialog if needed
-            if (character != null && character.SetSayDialog != null)
+            // --- Echoes of Aether: pick the dialog style (Default/Bubble) from the
+            // dropdown so no Say Dialog reference has to be dragged onto each command.
+            SayDialog styledDialog = BubbleDialogs.Resolve(dialogStyle);
+            if (styledDialog != null)
             {
-                SayDialog.ActiveSayDialog = character.SetSayDialog;
+                SayDialog.ActiveSayDialog = styledDialog;
             }
-
-            if (setSayDialog != null)
+            else
             {
-                SayDialog.ActiveSayDialog = setSayDialog;
+                // Fallback to the original Fungus behaviour if the styled dialog is unavailable.
+                if (character != null && character.SetSayDialog != null)
+                {
+                    SayDialog.ActiveSayDialog = character.SetSayDialog;
+                }
+
+                if (setSayDialog != null)
+                {
+                    SayDialog.ActiveSayDialog = setSayDialog;
+                }
             }
 
             var sayDialog = SayDialog.GetSayDialog();

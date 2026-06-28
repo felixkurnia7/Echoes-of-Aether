@@ -73,6 +73,12 @@ public class NPCWalker : MonoBehaviour
     [Header("On Finished (after the last waypoint)")]
     [SerializeField] private UnityEvent onFinished;
 
+    [Header("Resume After Battle (optional)")]
+    [Tooltip("If this GameManager story flag is already true when the scene starts (e.g. 'bear_defeated'), the NPC auto-starts walking from 'Resume From Waypoint Index'.")]
+    [SerializeField] private string resumeIfStoryFlag = "";
+    [Tooltip("Waypoint index to resume from (e.g. the waypoint after the battle trigger).")]
+    [SerializeField] private int resumeFromWaypointIndex = 0;
+
     public bool IsWalking { get; private set; }
 
     Coroutine routine;
@@ -106,12 +112,24 @@ public class NPCWalker : MonoBehaviour
     void Start()
     {
         if (walkOnStart)
+        {
             StartWalk();
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(resumeIfStoryFlag)
+            && GameManager.Instance != null
+            && GameManager.Instance.GetStoryFlag(resumeIfStoryFlag))
+        {
+            StartWalk(resumeFromWaypointIndex, null);
+        }
     }
 
-    public void StartWalk() => StartWalk(null);
+    public void StartWalk() => StartWalk(0, null);
 
-    public void StartWalk(Action onComplete)
+    public void StartWalk(Action onComplete) => StartWalk(0, onComplete);
+
+    public void StartWalk(int startIndex, Action onComplete)
     {
         if (waypoints == null || waypoints.Count == 0)
         {
@@ -125,7 +143,7 @@ public class NPCWalker : MonoBehaviour
         if (routine != null)
             StopCoroutine(routine);
 
-        routine = StartCoroutine(WalkRoutine());
+        routine = StartCoroutine(WalkRoutine(Mathf.Max(0, startIndex)));
     }
 
     public void StopWalk()
@@ -139,12 +157,13 @@ public class NPCWalker : MonoBehaviour
         ApplyAnimation(false);
     }
 
-    IEnumerator WalkRoutine()
+    IEnumerator WalkRoutine(int startIndex)
     {
         IsWalking = true;
 
-        foreach (Waypoint waypoint in waypoints)
+        for (int i = startIndex; i < waypoints.Count; i++)
         {
+            Waypoint waypoint = waypoints[i];
             if (waypoint == null || waypoint.point == null)
                 continue;
 

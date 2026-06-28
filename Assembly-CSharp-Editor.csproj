@@ -66,7 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
+    <Compile Include="Assets\Scripts\Characters\Editor\NPCWalkerEditor.cs" />
     <Compile Include="Assets\Polytope Studio\Welcome_Screen\Editor\PT_Welcome_Screen.cs" />
+    <Compile Include="Assets\Scripts\Editor\BubbleDialogBuilder.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraPath\Editor\CameraPathEditor.cs" />
   </ItemGroup>
   <ItemGroup>

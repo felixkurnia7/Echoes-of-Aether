@@ -81,6 +81,7 @@ namespace Fungus.EditorUtils
         protected SerializedProperty waitForClickProp;
         protected SerializedProperty stopVoiceoverProp;
         protected SerializedProperty setSayDialogProp;
+        protected SerializedProperty dialogStyleProp;
         protected SerializedProperty waitForVOProp;
 
         public override void OnEnable()
@@ -99,6 +100,7 @@ namespace Fungus.EditorUtils
             waitForClickProp = serializedObject.FindProperty("waitForClick");
             stopVoiceoverProp = serializedObject.FindProperty("stopVoiceover");
             setSayDialogProp = serializedObject.FindProperty("setSayDialog");
+            dialogStyleProp = serializedObject.FindProperty("dialogStyle");
             waitForVOProp = serializedObject.FindProperty("waitForVO");
 
             if (blackTex == null)
@@ -197,7 +199,8 @@ namespace Fungus.EditorUtils
             EditorGUILayout.PropertyField(fadeWhenDoneProp);
             EditorGUILayout.PropertyField(waitForClickProp);
             EditorGUILayout.PropertyField(stopVoiceoverProp);
-            EditorGUILayout.PropertyField(setSayDialogProp);
+            // --- Echoes of Aether: dropdown to pick Default vs Bubble dialog style.
+            EditorGUILayout.PropertyField(dialogStyleProp, new GUIContent("Dialog Style", "Default = normal box, Bubble = floating speech bubble. No manual reference needed."));
             EditorGUILayout.PropertyField(waitForVOProp);
             
             if (showPortraits && t.Portrait != null)
