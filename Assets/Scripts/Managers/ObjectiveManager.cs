@@ -32,6 +32,12 @@ public class ObjectiveManager : MonoBehaviour
     readonly HashSet<string> completedSubIds = new(StringComparer.OrdinalIgnoreCase);
     public IReadOnlyList<SubObjective> SubObjectives => subObjectives;
 
+    // Tracks which objective assets have been completed (kept across scene loads so
+    // conditional commands can branch on past progress). The id of the objective set
+    // from an asset, used to record completion.
+    readonly HashSet<string> completedObjectiveIds = new(StringComparer.OrdinalIgnoreCase);
+    string activeObjectiveId;
+
     public event Action<string> OnObjectiveSet;
     public event Action<string> OnObjectiveCompleted;
     public event Action OnObjectiveHidden;
@@ -74,8 +80,30 @@ public class ObjectiveManager : MonoBehaviour
             return;
 
         CurrentObjective = text;
+        activeObjectiveId = null; // plain-text objective has no asset id to track
         Status = ObjectiveStatus.Active;
         OnObjectiveSet?.Invoke(text);
+    }
+
+    /// <summary>
+    /// Sets the objective from a ScriptableObject asset. When
+    /// <paramref name="includeSubObjectives"/> is true, replaces the sub-objective
+    /// list with the ones listed on the asset.
+    /// </summary>
+    public void SetObjective(ObjectiveData data, bool includeSubObjectives = true)
+    {
+        if (data == null)
+            return;
+
+        SetObjective(data.Title);
+        activeObjectiveId = Normalize(data.Id);
+
+        if (!includeSubObjectives)
+            return;
+
+        ClearSubObjectives();
+        foreach (SubObjectiveData sub in data.SubObjectives)
+            AddSubObjective(sub);
     }
 
     public void CompleteObjective()
@@ -84,6 +112,8 @@ public class ObjectiveManager : MonoBehaviour
             return;
 
         Status = ObjectiveStatus.Completed;
+        if (!string.IsNullOrEmpty(activeObjectiveId))
+            completedObjectiveIds.Add(activeObjectiveId);
         OnObjectiveCompleted?.Invoke(CurrentObjective);
     }
 
@@ -91,6 +121,7 @@ public class ObjectiveManager : MonoBehaviour
     {
         Status = ObjectiveStatus.Hidden;
         CurrentObjective = null;
+        activeObjectiveId = null;
         subObjectives.Clear();
         completedSubIds.Clear();
         OnObjectiveHidden?.Invoke();
@@ -120,6 +151,13 @@ public class ObjectiveManager : MonoBehaviour
         OnSubObjectivesChanged?.Invoke();
     }
 
+    /// <summary>Adds (or updates) a sub-objective from a ScriptableObject asset.</summary>
+    public void AddSubObjective(SubObjectiveData sub)
+    {
+        if (sub != null)
+            AddSubObjective(sub.Id, sub.Text);
+    }
+
     public void CompleteSubObjective(string id)
     {
         string key = Normalize(id);
@@ -146,9 +184,36 @@ public class ObjectiveManager : MonoBehaviour
         }
     }
 
+    /// <summary>Marks a sub-objective complete from a ScriptableObject asset.</summary>
+    public void CompleteSubObjective(SubObjectiveData sub)
+    {
+        if (sub != null)
+            CompleteSubObjective(sub.Id);
+    }
+
     public bool IsSubObjectiveCompleted(string id)
     {
         return completedSubIds.Contains(Normalize(id));
+    }
+
+    public bool IsSubObjectiveCompleted(SubObjectiveData sub)
+    {
+        return sub != null && IsSubObjectiveCompleted(sub.Id);
+    }
+
+    /// <summary>True if the given objective asset has been completed (recorded when
+    /// <see cref="CompleteObjective"/> runs while that asset is the active objective).</summary>
+    public bool IsObjectiveCompleted(ObjectiveData data)
+    {
+        return data != null && completedObjectiveIds.Contains(Normalize(data.Id));
+    }
+
+    /// <summary>True if the given objective asset is the one currently shown and active.</summary>
+    public bool IsObjectiveActive(ObjectiveData data)
+    {
+        return data != null
+            && Status == ObjectiveStatus.Active
+            && string.Equals(activeObjectiveId, Normalize(data.Id), StringComparison.OrdinalIgnoreCase);
     }
 
     public void ClearSubObjectives()

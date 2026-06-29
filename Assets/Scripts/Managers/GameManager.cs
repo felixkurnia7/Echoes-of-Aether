@@ -68,9 +68,9 @@ public class GameManager : MonoBehaviour
         StartBattle(new[] { enemy }, null);
     }
 
-    public void StartBattle(EnemyData enemy, string victoryFlag)
+    public void StartBattle(EnemyData enemy, string victoryFlag, SubObjectiveData victorySubObjective = null)
     {
-        StartBattle(new[] { enemy }, victoryFlag);
+        StartBattle(new[] { enemy }, victoryFlag, victorySubObjective);
     }
 
     public void StartBattle(EnemyData[] enemies)
@@ -78,13 +78,13 @@ public class GameManager : MonoBehaviour
         StartBattle(enemies, null);
     }
 
-    public void StartBattle(EnemyData[] enemies, string victoryFlag)
+    public void StartBattle(EnemyData[] enemies, string victoryFlag, SubObjectiveData victorySubObjective = null)
     {
         if (enemies == null || enemies.Length == 0) return;
 
         string returnScene = SceneManager.GetActiveScene().name;
 
-        BattleSessionData.SetSession(defaultPlayerCharacter, enemies, returnScene, victoryFlag);
+        BattleSessionData.SetSession(defaultPlayerCharacter, enemies, returnScene, victoryFlag, victorySubObjective);
         SetState(GameState.Battle);
         GameEvents.RaiseBattleStart();
         LoadScene(battleSceneName);
@@ -94,9 +94,16 @@ public class GameManager : MonoBehaviour
     {
         string returnScene = BattleSessionData.ReturnSceneName;
         string victoryFlag = BattleSessionData.VictoryFlag;
+        SubObjectiveData victorySub = BattleSessionData.VictorySubObjective;
 
-        if (victory && !string.IsNullOrEmpty(victoryFlag))
-            SetStoryFlag(victoryFlag, true);
+        if (victory)
+        {
+            if (!string.IsNullOrEmpty(victoryFlag))
+                SetStoryFlag(victoryFlag, true);
+
+            if (victorySub != null && ObjectiveManager.Instance != null)
+                ObjectiveManager.Instance.CompleteSubObjective(victorySub);
+        }
 
         BattleSessionData.Clear();
         SetState(GameState.Exploring);

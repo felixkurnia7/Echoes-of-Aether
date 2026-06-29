@@ -9,11 +9,10 @@ using UnityEngine.Events;
 /// Moves an NPC along an ordered list of waypoints. Each waypoint can run an
 /// optional action when reached (a Fungus block and/or a UnityEvent) and the
 /// NPC will pause there until that action finishes before walking to the next
-/// waypoint. Rotates to face the direction of travel and (optionally) drives
-/// an Animator.
+/// waypoint. Core locomotion and Animator handling come from
+/// <see cref="CharacterMover"/>.
 /// </summary>
-[DisallowMultipleComponent]
-public class NPCWalker : MonoBehaviour
+public class NPCWalker : CharacterMover
 {
     [Serializable]
     public class Waypoint
@@ -32,8 +31,8 @@ public class NPCWalker : MonoBehaviour
         [Tooltip("Pause walking until the Fungus block above finishes before moving on.")]
         public bool waitForBlock = true;
 
-        [Tooltip("Optional: after the block, wait here until the sub-objective with this id is completed (e.g. 'signboard'). Leave empty to skip.")]
-        public string waitForSubObjectiveId = "";
+        [Tooltip("Optional: after the block, wait here until this sub-objective asset is completed (drag & drop). Leave empty to skip.")]
+        public SubObjectiveData waitForSubObjective;
 
         [Tooltip("Optional: after the block, wait here until this GameManager story flag becomes true. Leave empty to skip.")]
         public string waitForStoryFlag = "";
@@ -47,12 +46,6 @@ public class NPCWalker : MonoBehaviour
 
     [Header("Path")]
     [SerializeField] private List<Waypoint> waypoints = new();
-    [SerializeField] private float moveSpeed = 2.5f;
-    [SerializeField] private float turnSpeed = 10f;
-    [Tooltip("How close (meters) the NPC must get to a waypoint before it counts as reached.")]
-    [SerializeField] private float arriveThreshold = 0.15f;
-    [Tooltip("Keep the NPC at its current height while walking (recommended for flat ground).")]
-    [SerializeField] private bool keepCurrentHeight = true;
     [SerializeField] private bool walkOnStart = false;
 
     [Header("Player Proximity")]
@@ -61,43 +54,22 @@ public class NPCWalker : MonoBehaviour
     [Tooltip("How close (meters) the player must be to trigger a waypoint's action.")]
     [SerializeField] private float playerNearbyRadius = 3f;
 
-    [Header("Animation (optional)")]
-    [SerializeField] private Animator animator;
-    [SerializeField] private string speedParam = "Speed";
-    [SerializeField] private string isMovingParam = "IsMoving";
-    [Tooltip("Forward/back blend parameter. Left empty = ignored.")]
-    [SerializeField] private string moveYParam = "MoveY";
-    [Tooltip("Strafe blend parameter. Left empty = ignored.")]
-    [SerializeField] private string moveXParam = "MoveX";
-
     [Header("On Finished (after the last waypoint)")]
     [SerializeField] private UnityEvent onFinished;
 
     [Header("Resume After Battle (optional)")]
     [Tooltip("If this GameManager story flag is already true when the scene starts (e.g. 'bear_defeated'), the NPC auto-starts walking from 'Resume From Waypoint Index'.")]
     [SerializeField] private string resumeIfStoryFlag = "";
-    [Tooltip("Waypoint index to resume from (e.g. the waypoint after the battle trigger).")]
+    [Tooltip("Waypoint the NPC had reached before the battle. On resume it teleports here, then walks to the next waypoint (its battle-trigger action is not re-run).")]
     [SerializeField] private int resumeFromWaypointIndex = 0;
 
     public bool IsWalking { get; private set; }
 
     Coroutine routine;
-    int speedHash, isMovingHash, moveXHash, moveYHash;
     Action finishedCallback;
 
     Block awaitedBlock;
     bool awaitedBlockFinished;
-
-    void Awake()
-    {
-        if (animator == null)
-            animator = GetComponentInChildren<Animator>();
-
-        speedHash = Animator.StringToHash(speedParam);
-        isMovingHash = Animator.StringToHash(isMovingParam);
-        moveXHash = Animator.StringToHash(moveXParam);
-        moveYHash = Animator.StringToHash(moveYParam);
-    }
 
     void OnEnable()
     {
@@ -121,9 +93,35 @@ public class NPCWalker : MonoBehaviour
             && GameManager.Instance != null
             && GameManager.Instance.GetStoryFlag(resumeIfStoryFlag))
         {
-            StartWalk(resumeFromWaypointIndex, null);
+            ResumeAfterBattle();
         }
     }
+
+    // After a battle the scene reloads, so instead of walking all the way from
+    // the spawn point we snap the NPC onto the waypoint it had already reached
+    // and continue from the next one.
+    void ResumeAfterBattle()
+    {
+        SnapToWaypoint(resumeFromWaypointIndex);
+
+        int next = resumeFromWaypointIndex + 1;
+        if (waypoints != null && next < waypoints.Count)
+            StartWalk(next, null);
+    }
+
+    void SnapToWaypoint(int index)
+    {
+        if (waypoints == null || index < 0 || index >= waypoints.Count)
+            return;
+
+        Waypoint wp = waypoints[index];
+        if (wp != null)
+            TeleportTo(wp.point);
+    }
+
+    public override void BeginMovement(Action onComplete) => StartWalk(0, onComplete);
+
+    public override void StopMovement() => StopWalk();
 
     public void StartWalk() => StartWalk(0, null);
 
@@ -177,8 +175,8 @@ public class NPCWalker : MonoBehaviour
             if (waypoint.flowchart != null && !string.IsNullOrEmpty(waypoint.blockName))
                 yield return RunBlock(waypoint.flowchart, waypoint.blockName, waypoint.waitForBlock);
 
-            if (!string.IsNullOrEmpty(waypoint.waitForSubObjectiveId))
-                yield return WaitForSubObjective(waypoint.waitForSubObjectiveId);
+            if (waypoint.waitForSubObjective != null)
+                yield return WaitForSubObjective(waypoint.waitForSubObjective.Id);
 
             if (!string.IsNullOrEmpty(waypoint.waitForStoryFlag))
                 yield return WaitForStoryFlag(waypoint.waitForStoryFlag);
@@ -196,36 +194,6 @@ public class NPCWalker : MonoBehaviour
         Action cb = finishedCallback;
         finishedCallback = null;
         cb?.Invoke();
-    }
-
-    IEnumerator MoveTo(Transform target)
-    {
-        while (true)
-        {
-            Vector3 toTarget = target.position - transform.position;
-            toTarget.y = 0f;
-
-            float distance = toTarget.magnitude;
-            if (distance <= arriveThreshold)
-                break;
-
-            Vector3 direction = toTarget / Mathf.Max(distance, 0.0001f);
-
-            Quaternion targetRot = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation, targetRot, Time.deltaTime * turnSpeed);
-
-            float step = Mathf.Min(moveSpeed * Time.deltaTime, distance);
-            Vector3 next = transform.position + direction * step;
-            if (keepCurrentHeight)
-                next.y = transform.position.y;
-            transform.position = next;
-
-            ApplyAnimation(true);
-            yield return null;
-        }
-
-        ApplyAnimation(false);
     }
 
     IEnumerator WaitForPlayerNearby()
@@ -301,21 +269,6 @@ public class NPCWalker : MonoBehaviour
     {
         if (awaitedBlock != null && block == awaitedBlock)
             awaitedBlockFinished = true;
-    }
-
-    void ApplyAnimation(bool moving)
-    {
-        if (animator == null || animator.runtimeAnimatorController == null)
-            return;
-
-        if (!string.IsNullOrEmpty(speedParam))
-            animator.SetFloat(speedHash, moving ? moveSpeed : 0f);
-        if (!string.IsNullOrEmpty(isMovingParam))
-            animator.SetBool(isMovingHash, moving);
-        if (!string.IsNullOrEmpty(moveYParam))
-            animator.SetFloat(moveYHash, moving ? 1f : 0f);
-        if (!string.IsNullOrEmpty(moveXParam))
-            animator.SetFloat(moveXHash, 0f);
     }
 
     void OnDrawGizmosSelected()

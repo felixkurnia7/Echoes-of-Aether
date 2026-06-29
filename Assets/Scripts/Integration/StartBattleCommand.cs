@@ -11,6 +11,9 @@ public class StartBattleCommand : Command
     [Tooltip("Optional: story flag set to true when the player wins (e.g. 'bear_defeated'). Used to resume the NPC walk afterwards.")]
     [SerializeField] private string victoryFlag = "";
 
+    [Tooltip("Optional: sub-objective marked complete on the HUD when the player wins (drag & drop, e.g. 'encounter_bear').")]
+    [SerializeField] private SubObjectiveData completeOnVictory;
+
     public override void OnEnter()
     {
         if (GameManager.Instance == null)
@@ -27,7 +30,7 @@ public class StartBattleCommand : Command
             return;
         }
 
-        GameManager.Instance.StartBattle(enemy, victoryFlag);
+        GameManager.Instance.StartBattle(enemy, victoryFlag, completeOnVictory);
         // Scene changes to Battle; no Continue() needed.
     }
 
@@ -36,9 +39,13 @@ public class StartBattleCommand : Command
         if (enemy == null)
             return "Error: no enemy";
 
-        return string.IsNullOrEmpty(victoryFlag)
-            ? enemy.name
-            : $"{enemy.name} (flag: {victoryFlag})";
+        string suffix = "";
+        if (!string.IsNullOrEmpty(victoryFlag))
+            suffix += $" (flag: {victoryFlag})";
+        if (completeOnVictory != null)
+            suffix += $" (done: {completeOnVictory.name})";
+
+        return enemy.name + suffix;
     }
 
     public override Color GetButtonColor()

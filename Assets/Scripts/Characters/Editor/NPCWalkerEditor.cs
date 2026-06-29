@@ -24,6 +24,8 @@ public sealed class NPCWalkerEditor : UnityEditor.Editor
     SerializedProperty isMovingParam;
     SerializedProperty moveYParam;
     SerializedProperty moveXParam;
+    SerializedProperty moveBoolParam;
+    SerializedProperty idleBoolParam;
 
     SerializedProperty onFinished;
     SerializedProperty resumeIfStoryFlag;
@@ -46,6 +48,8 @@ public sealed class NPCWalkerEditor : UnityEditor.Editor
         isMovingParam = serializedObject.FindProperty("isMovingParam");
         moveYParam = serializedObject.FindProperty("moveYParam");
         moveXParam = serializedObject.FindProperty("moveXParam");
+        moveBoolParam = serializedObject.FindProperty("moveBoolParam");
+        idleBoolParam = serializedObject.FindProperty("idleBoolParam");
 
         onFinished = serializedObject.FindProperty("onFinished");
         resumeIfStoryFlag = serializedObject.FindProperty("resumeIfStoryFlag");
@@ -130,12 +134,14 @@ public sealed class NPCWalkerEditor : UnityEditor.Editor
 
     void DrawAnimationTab()
     {
-        Section("Animation (optional)", "Animator parameters driven while walking. Leave a parameter name empty to skip it. Animation only plays if the Animator has a controller assigned.");
+        Section("Animation (optional)", "Animator parameters driven while walking. Leave a parameter name empty to skip it. Only parameters that actually exist on the controller are set. Use Speed/IsMoving/MoveX/MoveY for blend-tree rigs, or Move/Idle Bool Param for AnyState-bool rigs (e.g. the Bear's 'WalkForward'/'Idle').");
         EditorGUILayout.PropertyField(animator);
         EditorGUILayout.PropertyField(speedParam);
         EditorGUILayout.PropertyField(isMovingParam);
         EditorGUILayout.PropertyField(moveYParam);
         EditorGUILayout.PropertyField(moveXParam);
+        EditorGUILayout.PropertyField(moveBoolParam);
+        EditorGUILayout.PropertyField(idleBoolParam);
     }
 
     void DrawEventsTab()
@@ -144,9 +150,11 @@ public sealed class NPCWalkerEditor : UnityEditor.Editor
         EditorGUILayout.PropertyField(onFinished);
 
         EditorGUILayout.Space(8f);
-        Section("Resume After Battle", "If the story flag is already true when the scene loads (e.g. after winning a battle), the NPC auto-starts from the chosen waypoint index.");
-        EditorGUILayout.PropertyField(resumeIfStoryFlag);
-        EditorGUILayout.PropertyField(resumeFromWaypointIndex);
+        Section("Resume After Battle", "If the story flag is already true when the scene loads (e.g. after winning a battle), the NPC teleports onto 'Resume From Waypoint Index' (the point it had reached before the battle) and then walks to the NEXT waypoint. That waypoint's own action/block is NOT re-run, so the battle won't trigger again. Add at least one waypoint after it for the NPC to continue to.");
+        EditorGUILayout.PropertyField(resumeIfStoryFlag, new GUIContent("Resume If Story Flag"));
+        EditorGUILayout.PropertyField(resumeFromWaypointIndex, new GUIContent("Resume From Waypoint Index"));
+
+        MoverEditorUtil.ResumeIndexHint(resumeIfStoryFlag, resumeFromWaypointIndex, waypoints, "waypoint");
     }
 
     void DrawRuntimeControls()

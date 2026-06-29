@@ -1623,6 +1623,7 @@ GameObject:
   - component: {fileID: 3246536962986829216}
   - component: {fileID: 346848336441928593}
   - component: {fileID: 8086605117641116860}
+  - component: {fileID: 1000000000000000010}
   m_Layer: 0
   m_Name: Enemy_Bear
   m_TagString: Untagged
@@ -1701,11 +1702,13 @@ MonoBehaviour:
   walkOnStart: 1
   player: {fileID: 0}
   playerNearbyRadius: 3
-  animator: {fileID: 0}
-  speedParam: Speed
-  isMovingParam: IsMoving
-  moveYParam: MoveY
-  moveXParam: MoveX
+  animator: {fileID: 7492796135839331647}
+  speedParam: 
+  isMovingParam: 
+  moveYParam: 
+  moveXParam: 
+  moveBoolParam: WalkForward
+  idleBoolParam: Idle
   onFinished:
     m_PersistentCalls:
       m_Calls: []
@@ -1760,6 +1763,25 @@ MonoBehaviour:
   rotationLerpSpeed: 10
   snapToGround: 1
   groundOffset: 0
+--- !u!114 &1000000000000000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7089744123938765592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d8e2f1a9b34c5d8e1f2a3b4c5d6e7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathOnStoryFlag
+  storyFlag: bear_defeated
+  whenValueIs: 1
+  animator: {fileID: 7492796135839331647}
+  deathBoolParam: Death
+  deathTriggerParam: 
+  disableWhenDead:
+  - {fileID: 3246536962986829216}
 --- !u!1 &7520034342967421964
 GameObject:
   m_ObjectHideFlags: 0

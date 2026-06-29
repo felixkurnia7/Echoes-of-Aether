@@ -17,12 +17,14 @@ public class SetObjectiveCommand : Command
 
     [SerializeField] private Mode mode = Mode.Set;
 
-    [Tooltip("Objective text. Used by Set and AddSubObjective.")]
-    [TextArea(1, 3)]
-    [SerializeField] private string objectiveText = "";
+    [Tooltip("Objective asset. When assigned, Set uses this instead of the text below (drag & drop).")]
+    [SerializeField] private ObjectiveData objectiveData;
 
-    [Tooltip("Unique id for the sub-objective. Used by AddSubObjective and CompleteSubObjective.")]
-    [SerializeField] private string subObjectiveId = "";
+    [Tooltip("Sub-objective asset. When assigned, AddSubObjective/CompleteSubObjective use this instead of the id/text below (drag & drop).")]
+    [SerializeField] private SubObjectiveData subObjectiveData;
+
+    [Tooltip("When Set uses an Objective asset, also add the asset's sub-objectives.")]
+    [SerializeField] private bool includeSubObjectives = true;
 
     public override void OnEnter()
     {
@@ -37,7 +39,9 @@ public class SetObjectiveCommand : Command
         switch (mode)
         {
             case Mode.Set:
-                manager.SetObjective(objectiveText);
+                if (objectiveData == null)
+                    Debug.LogWarning("[SetObjective] No Objective asset assigned.");
+                manager.SetObjective(objectiveData, includeSubObjectives);
                 break;
             case Mode.Complete:
                 manager.CompleteObjective();
@@ -46,10 +50,14 @@ public class SetObjectiveCommand : Command
                 manager.HideObjective();
                 break;
             case Mode.AddSubObjective:
-                manager.AddSubObjective(subObjectiveId, objectiveText);
+                if (subObjectiveData == null)
+                    Debug.LogWarning("[SetObjective] No Sub-objective asset assigned.");
+                manager.AddSubObjective(subObjectiveData);
                 break;
             case Mode.CompleteSubObjective:
-                manager.CompleteSubObjective(subObjectiveId);
+                if (subObjectiveData == null)
+                    Debug.LogWarning("[SetObjective] No Sub-objective asset assigned.");
+                manager.CompleteSubObjective(subObjectiveData);
                 break;
             case Mode.ClearSubObjectives:
                 manager.ClearSubObjectives();
@@ -64,11 +72,11 @@ public class SetObjectiveCommand : Command
         switch (mode)
         {
             case Mode.Set:
-                return string.IsNullOrEmpty(objectiveText) ? "Set: <empty>" : "Set: " + objectiveText;
+                return objectiveData != null ? "Set: " + objectiveData.name : "Set: <none>";
             case Mode.AddSubObjective:
-                return $"+ Sub [{subObjectiveId}]: {objectiveText}";
+                return subObjectiveData != null ? "+ Sub: " + subObjectiveData.name : "+ Sub: <none>";
             case Mode.CompleteSubObjective:
-                return $"Done Sub [{subObjectiveId}]";
+                return subObjectiveData != null ? "Done Sub: " + subObjectiveData.name : "Done Sub: <none>";
             default:
                 return mode.ToString();
         }

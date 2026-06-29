@@ -1,7 +1,7 @@
 using Fungus;
 using UnityEngine;
 
-[CommandInfo("Narrative", "Control NPC", "Starts or stops an NPCWalker moving along its waypoints.")]
+[CommandInfo("Narrative", "Control Mover", "Starts or stops any CharacterMover (NPCWalker, MonsterWalker, PlayerCutsceneMover) moving along its route.")]
 [AddComponentMenu("")]
 public class ControlNpcCommand : Command
 {
@@ -11,37 +11,37 @@ public class ControlNpcCommand : Command
         StopWalk
     }
 
-    [Tooltip("The NPC (with an NPCWalker component) to control.")]
-    [SerializeField] private NPCWalker target;
+    [Tooltip("The character to control. Accepts any CharacterMover: NPCWalker, MonsterWalker, or PlayerCutsceneMover.")]
+    [SerializeField] private CharacterMover target;
 
     [SerializeField] private Action action = Action.StartWalk;
 
-    [Tooltip("If enabled (StartWalk only), the flowchart waits until the NPC reaches its destination before continuing.")]
+    [Tooltip("If enabled (StartWalk only), the flowchart waits until the mover finishes its route before continuing. Looping movers (e.g. patrol) continue immediately.")]
     [SerializeField] private bool waitUntilArrived = false;
 
     public override void OnEnter()
     {
         if (target == null)
         {
-            Debug.LogError("[ControlNpc] No NPCWalker target assigned.");
+            Debug.LogError("[ControlMover] No CharacterMover target assigned.");
             Continue();
             return;
         }
 
         if (action == Action.StopWalk)
         {
-            target.StopWalk();
+            target.StopMovement();
             Continue();
             return;
         }
 
         if (waitUntilArrived)
         {
-            target.StartWalk(Continue);
+            target.BeginMovement(Continue);
             return;
         }
 
-        target.StartWalk();
+        target.BeginMovement();
         Continue();
     }
 
