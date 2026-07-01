@@ -175,13 +175,21 @@ public class PlayerCutsceneMover : CharacterMover
         foreach (Behaviour b in controlToDisable)
             if (b != null)
                 b.enabled = false;
+
+        // Keep CharacterController enabled so StepToward can Move() with gravity.
+        ResetVerticalVelocity();
     }
 
     void RestoreControl()
     {
+        ResetVerticalVelocity();
+
         foreach (Behaviour b in controlToDisable)
             if (b != null)
                 b.enabled = true;
+
+        if (TryGetComponent(out PlayerController playerController))
+            playerController.ResetMovementState();
     }
 
     void OnDrawGizmosSelected()

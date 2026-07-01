@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Builds and animates the on-screen objective panel (top-right).
+/// Builds and animates the on-screen objective panel (top-left).
 /// Driven entirely by <see cref="ObjectiveManager"/> events, so it never
 /// needs to be wired up in a scene.
 /// </summary>
@@ -135,7 +135,7 @@ public class ObjectiveHUD : MonoBehaviour
 
     IEnumerator ShowRoutine()
     {
-        yield return Animate(0f, 1f, shownPosition + Vector2.right * SlideOffset, shownPosition);
+        yield return Animate(0f, 1f, shownPosition + Vector2.left * SlideOffset, shownPosition);
         routine = null;
     }
 
@@ -144,7 +144,7 @@ public class ObjectiveHUD : MonoBehaviour
         group.alpha = 1f;
         panel.anchoredPosition = shownPosition;
         yield return new WaitForSeconds(CompletedHoldTime);
-        yield return Animate(1f, 0f, shownPosition, shownPosition + Vector2.right * SlideOffset);
+        yield return Animate(1f, 0f, shownPosition, shownPosition + Vector2.left * SlideOffset);
 
         if (ObjectiveManager.Instance != null)
             ObjectiveManager.Instance.HideObjective();
@@ -154,7 +154,7 @@ public class ObjectiveHUD : MonoBehaviour
 
     IEnumerator HideRoutine()
     {
-        yield return Animate(group.alpha, 0f, panel.anchoredPosition, shownPosition + Vector2.right * SlideOffset);
+        yield return Animate(group.alpha, 0f, panel.anchoredPosition, shownPosition + Vector2.left * SlideOffset);
         routine = null;
     }
 
@@ -176,7 +176,7 @@ public class ObjectiveHUD : MonoBehaviour
     void HideInstant()
     {
         group.alpha = 0f;
-        panel.anchoredPosition = shownPosition + Vector2.right * SlideOffset;
+        panel.anchoredPosition = shownPosition + Vector2.left * SlideOffset;
     }
 
     void BuildUI()
@@ -197,10 +197,10 @@ public class ObjectiveHUD : MonoBehaviour
         panelGo.transform.SetParent(canvasGo.transform, false);
 
         panel = panelGo.GetComponent<RectTransform>();
-        panel.anchorMin = new Vector2(1f, 1f);
-        panel.anchorMax = new Vector2(1f, 1f);
-        panel.pivot = new Vector2(1f, 1f);
-        shownPosition = new Vector2(-40f, -40f);
+        panel.anchorMin = new Vector2(0f, 1f);
+        panel.anchorMax = new Vector2(0f, 1f);
+        panel.pivot = new Vector2(0f, 1f);
+        shownPosition = new Vector2(40f, -40f);
         panel.anchoredPosition = shownPosition;
         panel.sizeDelta = new Vector2(460f, 100f);
 

@@ -19,8 +19,18 @@ public abstract class CharacterMover : MonoBehaviour
     [SerializeField] protected float turnSpeed = 10f;
     [Tooltip("How close (meters) the mover must get to a target before it counts as reached.")]
     [SerializeField] protected float arriveThreshold = 0.15f;
-    [Tooltip("Keep the character at its current height while moving (recommended for flat ground or when a GroundAligner handles Y).")]
+    [Tooltip("Keep the character at its current height while moving (recommended for flat ground or when a GroundAligner handles Y). Ignored when a CharacterController moves the character.")]
     [SerializeField] protected bool keepCurrentHeight = true;
+
+    [Header("CharacterController (optional)")]
+    [Tooltip("Gravity applied while stepping with an enabled CharacterController (e.g. player cutscene).")]
+    [SerializeField] protected float gravity = -20f;
+    [Tooltip("Small downward velocity while grounded so the controller stays stuck to slopes.")]
+    [SerializeField] protected float groundedStick = -2f;
+    [Tooltip("Layers treated as walkable ground when snapping a CharacterController.")]
+    [SerializeField] protected LayerMask groundMask = ~0;
+    [Tooltip("Max vertical correction (meters) applied per step to keep the capsule planted.")]
+    [SerializeField] protected float maxGroundSnapDistance = 0.35f;
 
     [Header("Animation (optional)")]
     [SerializeField] protected Animator animator;
@@ -59,11 +69,14 @@ public abstract class CharacterMover : MonoBehaviour
 
     int speedHash, isMovingHash, moveXHash, moveYHash, moveBoolHash, idleBoolHash;
     readonly HashSet<string> animatorParams = new();
+    CharacterVisual characterVisual;
 
     protected virtual void Awake()
     {
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+
+        characterVisual = GetComponent<CharacterVisual>();
 
         speedHash = Animator.StringToHash(speedParam);
         isMovingHash = Animator.StringToHash(isMovingParam);
@@ -123,24 +136,64 @@ public abstract class CharacterMover : MonoBehaviour
 
         Vector3 direction = toTarget / Mathf.Max(distance, 0.0001f);
 
-        Quaternion targetRot = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation, targetRot, Time.deltaTime * turnSpeed);
+        FaceMovementDirection(direction);
 
         float step = Mathf.Min(moveSpeed * Time.deltaTime, distance);
-        Vector3 next = transform.position + direction * step;
-        if (keepCurrentHeight)
-            next.y = transform.position.y;
-        transform.position = next;
+
+        if (TryGetComponent(out CharacterController cc) && cc.enabled)
+        {
+            if (cc.isGrounded && verticalVelocity < 0f)
+                verticalVelocity = groundedStick;
+            else if (!cc.isGrounded)
+                verticalVelocity += gravity * Time.deltaTime;
+
+            Vector3 motion = direction * step;
+            motion.y = verticalVelocity * Time.deltaTime;
+            cc.Move(motion);
+            CharacterGrounding.TrySnapToGround(
+                cc, transform, groundMask, 0f, maxGroundSnapDistance);
+        }
+        else
+        {
+            Vector3 next = transform.position + direction * step;
+            if (keepCurrentHeight)
+                next.y = transform.position.y;
+            transform.position = next;
+        }
 
         ApplyAnimation(true);
         return false;
+    }
+
+    /// <summary>
+    /// Rotates the visible model toward the walk direction. Characters with a
+    /// <see cref="CharacterVisual"/> rotate their model child (same as player
+    /// input); others rotate the root transform (e.g. NPCs).
+    /// </summary>
+    void FaceMovementDirection(Vector3 direction)
+    {
+        if (characterVisual != null)
+        {
+            characterVisual.SetMovement(direction, moveSpeed);
+            return;
+        }
+
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation, targetRot, Time.deltaTime * turnSpeed);
     }
 
     /// <summary>Drives the Animator. Override to customise behaviour per character type.</summary>
     protected virtual void ApplyAnimation(bool moving)
     {
         IsMoving = moving;
+
+        if (characterVisual != null)
+        {
+            if (!moving)
+                characterVisual.SetMovement(Vector3.zero, 0f);
+            return;
+        }
 
         if (animator == null || animator.runtimeAnimatorController == null)
             return;
@@ -182,10 +235,10 @@ public abstract class CharacterMover : MonoBehaviour
         if (col != null) col.enabled = false;
 
         Vector3 pos = target.position;
-        float offset = HeightAboveGround();
+        float pivotAboveGround = GetPivotYAboveGround();
 
         if (Physics.Raycast(pos + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Ignore))
-            pos.y = hit.point.y + offset;
+            pos.y = hit.point.y + pivotAboveGround;
         else if (keepCurrentHeight)
             pos.y = transform.position.y;
 
@@ -201,13 +254,49 @@ public abstract class CharacterMover : MonoBehaviour
 
         if (col != null) col.enabled = colWasEnabled;
         if (cc != null) cc.enabled = ccWasEnabled;
+
+        verticalVelocity = 0f;
     }
 
-    // How high the pivot currently sits above the ground (0 if no ground is found).
-    float HeightAboveGround()
+    /// <summary>Clears accumulated vertical velocity (e.g. after a cutscene ends).</summary>
+    protected void ResetVerticalVelocity() => verticalVelocity = 0f;
+
+    /// <summary>Vertical distance from the ground to this object's pivot when feet are planted.</summary>
+    float GetPivotYAboveGround()
     {
+        if (TryGetComponent(out CharacterController cc))
+            return CharacterGrounding.GetPivotYAboveGround(cc);
+
         if (Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Ignore))
             return Mathf.Max(0f, transform.position.y - hit.point.y);
+
         return 0f;
     }
+
+    /// <summary>
+    /// Disables the CharacterController so direct transform moves (cutscene stepping)
+    /// do not desync the controller's internal capsule. Re-enable with
+    /// <see cref="RestoreCharacterController"/>.
+    /// </summary>
+    protected void SuspendCharacterController()
+    {
+        if (!TryGetComponent(out CharacterController cc) || !cc.enabled)
+            return;
+
+        cc.enabled = false;
+        characterControllerSuspended = true;
+    }
+
+    /// <summary>Re-enables the CharacterController after cutscene movement.</summary>
+    protected void RestoreCharacterController()
+    {
+        if (!characterControllerSuspended || !TryGetComponent(out CharacterController cc))
+            return;
+
+        cc.enabled = true;
+        characterControllerSuspended = false;
+    }
+
+    protected bool characterControllerSuspended;
+    float verticalVelocity;
 }

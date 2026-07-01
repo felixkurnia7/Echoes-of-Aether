@@ -18,6 +18,9 @@ public class SceneTransitionTrigger : MonoBehaviour
     [Tooltip("Fire only the first time something enters.")]
     [SerializeField] private bool triggerOnce = true;
 
+    [Tooltip("If Trigger Once is enabled, disable this Collider after firing (prevents re-trigger from overlaps).")]
+    [SerializeField] private bool disableColliderAfterUse = true;
+
     [Tooltip("Optional: only fire if this GameManager story flag is set. Leave empty to always allow.")]
     [SerializeField] private string requiredStoryFlag = "";
 
@@ -54,6 +57,9 @@ public class SceneTransitionTrigger : MonoBehaviour
 
         used = true;
         onTriggered?.Invoke();
+
+        if (triggerOnce && disableColliderAfterUse && TryGetComponent(out Collider col))
+            col.enabled = false;
 
         if (string.IsNullOrEmpty(targetScene))
             return;

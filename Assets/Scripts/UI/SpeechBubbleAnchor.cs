@@ -27,6 +27,14 @@ public class SpeechBubbleAnchor : MonoBehaviour
 
     public Character Character => character;
 
+    public void Configure(Character target, Transform head = null, float height = 2.2f)
+    {
+        character = target;
+        if (head != null)
+            headPoint = head;
+        headHeight = height;
+    }
+
     public Vector3 WorldPoint
     {
         get

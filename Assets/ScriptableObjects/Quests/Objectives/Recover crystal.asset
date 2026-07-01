@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf2750267a8ca2b43af966b0788445ae, type: 3}
+  m_Name: Recover crystal
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveData
+  id: recover_crystal
+  title: 'Recover the Aether Crystal '
+  subObjectives:
+  - {fileID: 11400000, guid: 1b9e49e11508a8c4fac928d569cf1d1b, type: 2}

@@ -8,8 +8,8 @@ using UnityEngine.UI;
 /// <summary>
 /// Minimal turn-based battle controller. Reads the encounter from
 /// <see cref="BattleSessionData"/>, builds a simple runtime UI, runs a
-/// round-based loop (player acts, then each enemy acts) and returns to the
-/// previous scene via <see cref="GameManager.EndBattle"/>.
+/// speed-ordered turn loop and returns to the previous scene via
+/// <see cref="GameManager.EndBattle"/>.
 ///
 /// Auto-spawns itself whenever the Battle scene loads, so no scene wiring is
 /// needed.
@@ -23,7 +23,12 @@ public class BattleManager : MonoBehaviour
         public CharacterRuntime runtime;
         public EnemyData enemyData;
         public TMP_Text statLabel;
+        public Button targetButton;
+        public Image targetBackground;
+        public BattleActor actor;
+        public bool isPlayer;
         public string Name => runtime.Data != null ? runtime.Data.characterName : "???";
+        public int Speed => runtime.Data != null ? runtime.Data.speed : 0;
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -56,8 +61,17 @@ public class BattleManager : MonoBehaviour
 
     PlayerAction chosenAction;
     SkillData chosenSkill;
+    Combatant chosenTarget;
     bool actionChosen;
+    bool targetChosen;
+    bool requiresTarget;
     bool playerDefending;
+
+    BattleTutorialGuide battleTutorial;
+
+    static readonly Color EnemyRowColor = new Color(0.06f, 0.07f, 0.1f, 0.55f);
+    static readonly Color EnemyTargetColor = new Color(0.22f, 0.14f, 0.1f, 0.92f);
+    static readonly Color EnemySelectedColor = new Color(0.35f, 0.22f, 0.08f, 0.95f);
 
     void Start()
     {
@@ -72,13 +86,15 @@ public class BattleManager : MonoBehaviour
         }
 
         SetupCombatants();
+        SetupActors();
+        battleTutorial = BattleTutorialGuide.TryCreate();
         BuildUI();
         StartCoroutine(BattleLoop());
     }
 
     void SetupCombatants()
     {
-        player = new Combatant { runtime = new CharacterRuntime(BattleSessionData.PlayerCharacter) };
+        player = new Combatant { runtime = new CharacterRuntime(BattleSessionData.PlayerCharacter), isPlayer = true };
 
         foreach (EnemyData data in BattleSessionData.Enemies)
         {
@@ -93,29 +109,214 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Hooks up the 3D actors that are pre-placed in the Battle scene. Actors are
+    /// matched to combatants by <see cref="BattleActor.Side"/>, moved onto their
+    /// spawn markers ("Spawn Player" and up to six "Spawn Enemy" empties) and
+    /// turned to face each other. Everything stays optional, so the battle still
+    /// runs if no actors or markers exist.
+    /// </summary>
+    const string PlayerSpawnName = "Spawn Player";
+    const string EnemySpawnName = "Spawn Enemy";
+
+    void SetupActors()
+    {
+        // Snapshot of actors already in the scene (used as a migration fallback
+        // when a character has no battlePrefab assigned yet).
+        var preplaced = new List<BattleActor>(FindObjectsByType<BattleActor>(FindObjectsSortMode.None));
+
+        Transform playerSpawn = FindMarker(PlayerSpawnName);
+        List<Transform> enemySpawns = FindEnemySpawnMarkers();
+
+        Vector3 playerPos = playerSpawn != null ? playerSpawn.position : new Vector3(-3f, 0f, 0f);
+        Quaternion playerRot = playerSpawn != null ? playerSpawn.rotation : Quaternion.identity;
+        player.actor = ResolveActor(player.runtime.Data, BattleSide.Player, preplaced, playerPos, playerRot);
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            Transform spawn = GetEnemySpawnMarker(enemySpawns, i);
+            Vector3 pos = spawn != null ? spawn.position : new Vector3(2f, 0f, 0f);
+            Quaternion rot = spawn != null ? spawn.rotation : Quaternion.identity;
+            enemies[i].actor = ResolveActor(enemies[i].runtime.Data, BattleSide.Enemy, preplaced, pos, rot);
+        }
+
+        if (enemySpawns.Count > 0 && enemies.Count > enemySpawns.Count)
+        {
+            Debug.LogWarning(
+                $"[BattleManager] {enemies.Count} enemies but only {enemySpawns.Count} '{EnemySpawnName}' markers; extras share the last slot.");
+        }
+
+        // Hide any pre-placed actors that data-driven spawns replaced.
+        foreach (BattleActor leftover in preplaced)
+            if (leftover != null)
+                leftover.gameObject.SetActive(false);
+
+        // Turn every living actor toward the player for a proper face-off.
+        if (player.actor != null)
+        {
+            foreach (Combatant enemy in enemies)
+            {
+                if (enemy.actor != null)
+                    enemy.actor.FaceInstant(player.actor.transform.position);
+            }
+
+            Combatant firstEnemy = FirstAliveEnemy();
+            if (firstEnemy?.actor != null)
+                player.actor.FaceInstant(firstEnemy.actor.transform.position);
+        }
+    }
+
+    /// <summary>
+    /// Spawns the character's <see cref="CharacterData.battlePrefab"/> at the
+    /// given pose. If no prefab is assigned, falls back to reusing a pre-placed
+    /// actor of the matching side (removing it from <paramref name="preplaced"/>
+    /// so it isn't disabled afterwards).
+    /// </summary>
+    BattleActor ResolveActor(CharacterData data, BattleSide side, List<BattleActor> preplaced, Vector3 pos, Quaternion rot)
+    {
+        if (data != null && data.battlePrefab != null)
+        {
+            GameObject go = Instantiate(data.battlePrefab, pos, rot);
+            BattleActor spawned = go.GetComponent<BattleActor>() ?? go.GetComponentInChildren<BattleActor>();
+            if (spawned != null)
+                spawned.PlaceAt(pos, rot);
+            else
+                Debug.LogWarning($"[BattleManager] battlePrefab for '{data.characterName}' has no BattleActor component.");
+            return spawned;
+        }
+
+        for (int i = 0; i < preplaced.Count; i++)
+        {
+            if (preplaced[i] == null || preplaced[i].Side != side)
+                continue;
+
+            BattleActor actor = preplaced[i];
+            preplaced.RemoveAt(i);
+            actor.PlaceAt(pos, rot);
+            return actor;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Collects every <see cref="EnemySpawnName"/> in the active scene and sorts
+    /// them column-first (lower X, then higher Z = top row) so lineup index 0
+    /// maps to the nearest column's top slot.
+    /// </summary>
+    static List<Transform> FindEnemySpawnMarkers()
+    {
+        var markers = new List<Transform>();
+        Scene scene = SceneManager.GetActiveScene();
+        foreach (GameObject root in scene.GetRootGameObjects())
+            CollectSpawnMarkers(root.transform, markers);
+
+        markers.Sort(CompareEnemySpawnMarkers);
+        return markers;
+    }
+
+    static void CollectSpawnMarkers(Transform node, List<Transform> results)
+    {
+        if (node.name == EnemySpawnName)
+            results.Add(node);
+
+        for (int i = 0; i < node.childCount; i++)
+            CollectSpawnMarkers(node.GetChild(i), results);
+    }
+
+    static int CompareEnemySpawnMarkers(Transform a, Transform b)
+    {
+        Vector3 pa = a.position;
+        Vector3 pb = b.position;
+
+        int xCompare = pa.x.CompareTo(pb.x);
+        if (xCompare != 0)
+            return xCompare;
+
+        return pb.z.CompareTo(pa.z);
+    }
+
+    static Transform GetEnemySpawnMarker(List<Transform> markers, int enemyIndex)
+    {
+        if (markers == null || markers.Count == 0)
+            return null;
+
+        int index = Mathf.Min(enemyIndex, markers.Count - 1);
+        return markers[index];
+    }
+
+    static Transform FindMarker(string markerName)
+    {
+        GameObject go = GameObject.Find(markerName);
+        return go != null ? go.transform : null;
+    }
+
+    /// <summary>
+    /// Runs the attacker's lunge animation (if it has an actor) and fires
+    /// <paramref name="onImpact"/> at the moment damage should land. Falls back to
+    /// applying the impact immediately when no actors are present.
+    /// </summary>
+    IEnumerator PerformAttack(Combatant attacker, Combatant target, System.Action onImpact)
+    {
+        if (attacker?.actor != null && target?.actor != null)
+            yield return attacker.actor.AttackRoutine(target.actor, onImpact);
+        else
+            onImpact?.Invoke();
+    }
+
+    /// <summary>Plays the hit or death reaction on a combatant's actor and refreshes the HUD.</summary>
+    void ReactToDamage(Combatant victim)
+    {
+        if (victim?.actor != null)
+        {
+            if (victim.runtime.IsAlive)
+                victim.actor.PlayHit();
+            else
+                victim.actor.PlayDeath();
+        }
+
+        AudioManager.Instance?.PlayHitSound();
+        RefreshStats();
+    }
+
     IEnumerator BattleLoop()
     {
-        string opening = enemies.Count > 0 ? $"A wild {enemies[0].Name} appears!" : "Battle start!";
+        string opening = enemies.Count switch
+        {
+            0 => "Battle start!",
+            1 => $"A wild {enemies[0].Name} appears!",
+            _ => $"{enemies.Count} enemies appear!"
+        };
         SetMessage(opening);
         yield return new WaitForSeconds(1.2f);
 
         while (true)
         {
             playerDefending = false;
-            yield return PlayerTurn();
+            List<Combatant> turnOrder = BuildTurnOrder();
 
-            if (AllEnemiesDefeated())
+            foreach (Combatant combatant in turnOrder)
             {
-                yield return EndSequence(true);
-                yield break;
-            }
+                if (combatant.isPlayer)
+                {
+                    if (!player.runtime.IsAlive)
+                        continue;
 
-            foreach (Combatant enemy in enemies)
-            {
-                if (!enemy.runtime.IsAlive)
-                    continue;
+                    yield return PlayerTurn();
+                }
+                else
+                {
+                    if (!combatant.runtime.IsAlive)
+                        continue;
 
-                yield return EnemyTurn(enemy);
+                    yield return EnemyTurn(combatant);
+                }
+
+                if (AllEnemiesDefeated())
+                {
+                    yield return EndSequence(true);
+                    yield break;
+                }
 
                 if (!player.runtime.IsAlive)
                 {
@@ -126,32 +327,88 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Living combatants sorted by <see cref="CharacterData.speed"/> (highest first).
+    /// Ties favour the player.
+    /// </summary>
+    List<Combatant> BuildTurnOrder()
+    {
+        var order = new List<Combatant> { player };
+        foreach (Combatant enemy in enemies)
+        {
+            if (enemy.runtime.IsAlive)
+                order.Add(enemy);
+        }
+
+        order.Sort(CompareTurnPriority);
+        return order;
+    }
+
+    static int CompareTurnPriority(Combatant a, Combatant b)
+    {
+        int speedCompare = b.Speed.CompareTo(a.Speed);
+        if (speedCompare != 0)
+            return speedCompare;
+
+        if (a.isPlayer != b.isPlayer)
+            return a.isPlayer ? -1 : 1;
+
+        return 0;
+    }
+
     IEnumerator PlayerTurn()
     {
-        SetMessage("Your turn - choose an action.");
-        SetButtonsInteractable(true);
+        if (battleTutorial != null)
+            yield return battleTutorial.OnPlayerTurnStart();
+
+        chosenTarget = null;
+        SetMessage(GetTurnPrompt());
+        SetActionButtonsForTurn(true);
+        SetTargetButtonsInteractable(false);
 
         actionChosen = false;
+        requiresTarget = false;
         while (!actionChosen)
             yield return null;
 
         SetButtonsInteractable(false);
 
-        Combatant target = FirstAliveEnemy();
+        if (RequiresEnemyTargetSelection())
+        {
+            SetMessage("Select an enemy to target.");
+            SetTargetButtonsInteractable(true);
+
+            targetChosen = false;
+            while (!targetChosen)
+                yield return null;
+
+            SetTargetButtonsInteractable(false);
+            ResetEnemyRowColors();
+        }
+        else if (requiresTarget)
+        {
+            chosenTarget = FirstAliveEnemy();
+        }
 
         switch (chosenAction)
         {
             case PlayerAction.Attack:
-                if (target != null)
+                if (chosenTarget != null)
                 {
-                    int dmg = player.runtime.CalculateBasicAttackDamage(target.runtime);
-                    target.runtime.TakeDamage(dmg);
-                    SetMessage($"You strike {target.Name} for {dmg} damage!");
+                    Combatant attackTarget = chosenTarget;
+                    yield return PerformAttack(player, attackTarget, () =>
+                    {
+                        int dmg = player.runtime.CalculateBasicAttackDamage(attackTarget.runtime);
+                        attackTarget.runtime.TakeDamage(dmg);
+                        SetMessage($"You strike {attackTarget.Name} for {dmg} damage!");
+                        ReactToDamage(attackTarget);
+                    });
+
                 }
                 break;
 
             case PlayerAction.Skill:
-                yield return ResolvePlayerSkill(target);
+                yield return ResolvePlayerSkill(chosenTarget);
                 break;
 
             case PlayerAction.Defend:
@@ -162,6 +419,34 @@ public class BattleManager : MonoBehaviour
 
         RefreshStats();
         yield return new WaitForSeconds(1f);
+    }
+
+    bool RequiresEnemyTargetSelection()
+    {
+        if (!requiresTarget)
+            return false;
+
+        return CountAliveEnemies() > 1;
+    }
+
+    static bool NeedsEnemyTarget(SkillData skill)
+    {
+        if (skill == null)
+            return false;
+
+        if (skill.category == SkillCategory.Support || skill.targetType == SkillTargetType.Self)
+            return false;
+
+        return skill.targetType == SkillTargetType.Enemy;
+    }
+
+    int CountAliveEnemies()
+    {
+        int count = 0;
+        foreach (Combatant enemy in enemies)
+            if (enemy.runtime.IsAlive)
+                count++;
+        return count;
     }
 
     IEnumerator ResolvePlayerSkill(Combatant target)
@@ -180,9 +465,14 @@ public class BattleManager : MonoBehaviour
         }
         else if (target != null)
         {
-            int dmg = player.runtime.CalculateSkillDamage(chosenSkill, target.runtime);
-            target.runtime.TakeDamage(dmg);
-            SetMessage($"You cast {chosenSkill.skillName} on {target.Name} for {dmg} damage!");
+            SkillData skill = chosenSkill;
+            yield return PerformAttack(player, target, () =>
+            {
+                int dmg = player.runtime.CalculateSkillDamage(skill, target.runtime);
+                target.runtime.TakeDamage(dmg);
+                SetMessage($"You cast {skill.skillName} on {target.Name} for {dmg} damage!");
+                ReactToDamage(target);
+            });
         }
     }
 
@@ -203,12 +493,16 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            int dmg = enemy.runtime.CalculateBasicAttackDamage(player.runtime);
-            if (playerDefending)
-                dmg = Mathf.Max(1, dmg / 2);
+            yield return PerformAttack(enemy, player, () =>
+            {
+                int dmg = enemy.runtime.CalculateBasicAttackDamage(player.runtime);
+                if (playerDefending)
+                    dmg = Mathf.Max(1, dmg / 2);
 
-            player.runtime.TakeDamage(dmg);
-            SetMessage($"{enemy.Name} hits you for {dmg} damage!");
+                player.runtime.TakeDamage(dmg);
+                SetMessage($"{enemy.Name} hits you for {dmg} damage!");
+                ReactToDamage(player);
+            });
         }
 
         RefreshStats();
@@ -218,8 +512,15 @@ public class BattleManager : MonoBehaviour
     IEnumerator EndSequence(bool victory)
     {
         SetButtonsInteractable(false);
+        SetTargetButtonsInteractable(false);
         SetMessage(victory ? "Victory!" : "You were defeated...");
-        yield return new WaitForSeconds(1.8f);
+
+        if (victory && battleTutorial != null)
+            yield return battleTutorial.OnVictory();
+        else
+            yield return new WaitForSeconds(1.8f);
+
+        battleTutorial?.HideBubble();
 
         if (GameManager.Instance != null)
             GameManager.Instance.EndBattle(victory);
@@ -245,30 +546,176 @@ public class BattleManager : MonoBehaviour
 
     void OnAttack()
     {
+        if (!IsTutorialActionAllowed(PlayerAction.Attack))
+            return;
+
         chosenAction = PlayerAction.Attack;
+        chosenSkill = null;
+        requiresTarget = CountAliveEnemies() > 0;
         actionChosen = true;
     }
 
     void OnDefend()
     {
+        if (!IsTutorialActionAllowed(PlayerAction.Defend))
+            return;
+
         chosenAction = PlayerAction.Defend;
+        chosenSkill = null;
+        requiresTarget = false;
         actionChosen = true;
     }
 
     void OnSkill(SkillData skill)
     {
+        if (!IsTutorialActionAllowed(PlayerAction.Skill, skill))
+            return;
+
         chosenAction = PlayerAction.Skill;
         chosenSkill = skill;
+        requiresTarget = NeedsEnemyTarget(skill) && CountAliveEnemies() > 0;
         actionChosen = true;
+    }
+
+    void OnEnemyTargetSelected(Combatant enemy)
+    {
+        if (enemy == null || !enemy.runtime.IsAlive)
+            return;
+
+        chosenTarget = enemy;
+        targetChosen = true;
+        HighlightSelectedEnemy(enemy);
+    }
+
+    void HighlightSelectedEnemy(Combatant selected)
+    {
+        foreach (Combatant enemy in enemies)
+        {
+            if (enemy.targetBackground == null)
+                continue;
+
+            enemy.targetBackground.color = enemy == selected
+                ? EnemySelectedColor
+                : EnemyTargetColor;
+        }
+    }
+
+    void ResetEnemyRowColors()
+    {
+        foreach (Combatant enemy in enemies)
+        {
+            if (enemy.targetBackground != null)
+                enemy.targetBackground.color = EnemyRowColor;
+        }
+    }
+
+    void SetTargetButtonsInteractable(bool value)
+    {
+        foreach (Combatant enemy in enemies)
+        {
+            if (enemy.targetButton == null)
+                continue;
+
+            bool alive = enemy.runtime.IsAlive;
+            enemy.targetButton.interactable = value && alive;
+
+            if (enemy.targetBackground != null)
+                enemy.targetBackground.color = value && alive ? EnemyTargetColor : EnemyRowColor;
+        }
     }
 
     void SetButtonsInteractable(bool value)
     {
-        foreach (Button button in actionButtons)
-            button.interactable = value;
+        if (!value)
+        {
+            foreach (Button button in actionButtons)
+                button.interactable = false;
+
+            foreach ((Button button, SkillData _) in skillButtons)
+                button.interactable = false;
+            return;
+        }
+
+        SetActionButtonsForTurn(true);
+    }
+
+    void SetActionButtonsForTurn(bool enabled)
+    {
+        if (!enabled)
+        {
+            SetButtonsInteractable(false);
+            return;
+        }
+
+        bool restrict = battleTutorial != null && battleTutorial.IsRestrictingActions;
+        BattleTutorialGuide.RequiredAction required = restrict
+            ? battleTutorial.CurrentRequiredAction
+            : BattleTutorialGuide.RequiredAction.None;
+
+        bool freeChoice = required == BattleTutorialGuide.RequiredAction.None;
+
+        if (actionButtons.Count > 0)
+            actionButtons[0].interactable = freeChoice || required == BattleTutorialGuide.RequiredAction.Attack;
+
+        if (actionButtons.Count > 1)
+            actionButtons[actionButtons.Count - 1].interactable = freeChoice;
 
         foreach ((Button button, SkillData skill) in skillButtons)
-            button.interactable = value && player.runtime.CurrentMP >= skill.manaCost;
+        {
+            bool skillAllowed = freeChoice;
+            if (!freeChoice)
+            {
+                skillAllowed = required switch
+                {
+                    BattleTutorialGuide.RequiredAction.Skill => IsOffensiveSkill(skill),
+                    BattleTutorialGuide.RequiredAction.Heal => IsHealSkill(skill),
+                    _ => false
+                };
+            }
+
+            button.interactable = skillAllowed && player.runtime.CurrentMP >= skill.manaCost;
+        }
+    }
+
+    string GetTurnPrompt()
+    {
+        if (battleTutorial == null || !battleTutorial.IsRestrictingActions)
+            return "Your turn - choose an action.";
+
+        return battleTutorial.CurrentRequiredAction switch
+        {
+            BattleTutorialGuide.RequiredAction.Attack => "Your turn - choose Attack.",
+            BattleTutorialGuide.RequiredAction.Skill => "Your turn - choose a skill.",
+            BattleTutorialGuide.RequiredAction.Heal => "Your turn - use Heal.",
+            _ => "Your turn - choose an action."
+        };
+    }
+
+    bool IsTutorialActionAllowed(PlayerAction action, SkillData skill = null)
+    {
+        if (battleTutorial == null || !battleTutorial.IsRestrictingActions)
+            return true;
+
+        return battleTutorial.CurrentRequiredAction switch
+        {
+            BattleTutorialGuide.RequiredAction.Attack => action == PlayerAction.Attack,
+            BattleTutorialGuide.RequiredAction.Skill => action == PlayerAction.Skill && IsOffensiveSkill(skill),
+            BattleTutorialGuide.RequiredAction.Heal => action == PlayerAction.Skill && IsHealSkill(skill),
+            _ => true
+        };
+    }
+
+    static bool IsHealSkill(SkillData skill)
+    {
+        if (skill == null)
+            return false;
+
+        return skill.category == SkillCategory.Support || skill.targetType == SkillTargetType.Self;
+    }
+
+    static bool IsOffensiveSkill(SkillData skill)
+    {
+        return skill != null && !IsHealSkill(skill);
     }
 
     void SetMessage(string text)
@@ -280,7 +727,7 @@ public class BattleManager : MonoBehaviour
     void RefreshStats()
     {
         if (playerStatLabel != null)
-            playerStatLabel.text = $"{player.Name}\nHP {player.runtime.CurrentHP}/{player.runtime.Data.maxHP}    MP {player.runtime.CurrentMP}/{player.runtime.Data.maxMP}";
+            playerStatLabel.text = $"{player.Name}\nHP {player.runtime.CurrentHP}/{player.runtime.Data.maxHP}    MP {player.runtime.CurrentMP}/{player.runtime.Data.maxMP}    SPD {player.Speed}";
 
         foreach (Combatant enemy in enemies)
         {
@@ -288,7 +735,7 @@ public class BattleManager : MonoBehaviour
                 continue;
 
             string hp = enemy.runtime.IsAlive
-                ? $"HP {enemy.runtime.CurrentHP}/{enemy.runtime.Data.maxHP}"
+                ? $"HP {enemy.runtime.CurrentHP}/{enemy.runtime.Data.maxHP}    SPD {enemy.Speed}"
                 : "Defeated";
             enemy.statLabel.text = $"{enemy.Name}\n{hp}";
         }
@@ -315,14 +762,16 @@ public class BattleManager : MonoBehaviour
             new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(1f, 1f),
             new Vector2(-40f, -40f), new Vector2(520f, 0f));
         var enemyLayout = enemyColumn.gameObject.AddComponent<VerticalLayoutGroup>();
-        enemyLayout.spacing = 6f;
+        enemyLayout.spacing = 8f;
+        enemyLayout.padding = new RectOffset(10, 10, 10, 10);
+        enemyLayout.childAlignment = TextAnchor.UpperRight;
         enemyLayout.childControlWidth = true;
         enemyLayout.childControlHeight = true;
         enemyLayout.childForceExpandWidth = true;
         AddFitter(enemyColumn.gameObject);
 
         foreach (Combatant enemy in enemies)
-            enemy.statLabel = CreateText(enemyColumn, "Enemy", 30f, TextAlignmentOptions.Right);
+            CreateEnemyTargetRow(enemyColumn, enemy);
 
         // Message line (center)
         var messagePanel = CreatePanel(canvas.transform, "Message",
@@ -372,6 +821,58 @@ public class BattleManager : MonoBehaviour
 
         SetButtonsInteractable(false);
         RefreshStats();
+    }
+
+    void CreateEnemyTargetRow(Transform parent, Combatant enemy)
+    {
+        var go = new GameObject(enemy.Name, typeof(RectTransform), typeof(Image), typeof(Button));
+        go.transform.SetParent(parent, false);
+
+        var image = go.GetComponent<Image>();
+        image.color = EnemyRowColor;
+        image.raycastTarget = true;
+
+        var button = go.GetComponent<Button>();
+        button.interactable = false;
+        Combatant captured = enemy;
+        button.onClick.AddListener(() => OnEnemyTargetSelected(captured));
+
+        var colors = button.colors;
+        colors.highlightedColor = EnemySelectedColor;
+        colors.pressedColor = EnemySelectedColor;
+        colors.selectedColor = EnemySelectedColor;
+        button.colors = colors;
+
+        var le = go.AddComponent<LayoutElement>();
+        le.minHeight = 78f;
+
+        enemy.targetButton = button;
+        enemy.targetBackground = image;
+        enemy.statLabel = CreateEnemyRowText(go.transform);
+    }
+
+    TMP_Text CreateEnemyRowText(Transform parent)
+    {
+        var textGo = new GameObject("Stats", typeof(RectTransform));
+        textGo.transform.SetParent(parent, false);
+
+        var rect = textGo.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = new Vector2(12f, 8f);
+        rect.offsetMax = new Vector2(-12f, -8f);
+
+        var label = textGo.AddComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            label.font = TMP_Settings.defaultFontAsset;
+        label.fontSize = 28f;
+        label.color = Color.white;
+        label.alignment = TextAlignmentOptions.TopRight;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.richText = true;
+        label.raycastTarget = false;
+
+        return label;
     }
 
     static void EnsureEventSystem()

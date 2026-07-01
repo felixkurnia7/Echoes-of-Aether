@@ -65,6 +65,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.8f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Managers\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ObjectiveManager.cs" />
     <Compile Include="Assets\Scripts\Interaction\IInteractable.cs" />
     <Compile Include="Assets\Scripts\UI\ObjectiveHUD.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Characters\GroundAligner.cs" />
     <Compile Include="Assets\Scripts\Core\Data\CombatFormulaTest.cs" />
+    <Compile Include="Assets\Scripts\UI\EndingScreen.cs" />
+    <Compile Include="Assets\Scripts\Integration\ShowEndingScreenCommand.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerInputHandler.cs" />
     <Compile Include="Assets\Scripts\Integration\ControlNpcCommand.cs" />
     <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="Assets\Scripts\Core\BattleSessionData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillData.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerCutsceneMover.cs" />
+    <Compile Include="Assets\Scripts\Characters\CharacterGrounding.cs" />
     <Compile Include="Assets\Scripts\Integration\SetObjectiveCommand.cs" />
     <Compile Include="Assets\Scripts\UI\SpeechBubbleAnchor.cs" />
     <Compile Include="Assets\Scripts\Core\BootstrapTest.cs" />
@@ -109,11 +113,14 @@
     <Compile Include="Assets\Scripts\Integration\StopIfStoryFlagCommand.cs" />
     <Compile Include="Assets\Scripts\Integration\IfObjectiveCommand.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PT_PlayerMovement.cs" />
+    <Compile Include="Assets\Aztech Games\GemsAndCrystals\Script\Rotate.cs" />
     <Compile Include="Assets\Scripts\Interaction\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\Interaction\WorldInteractable.cs" />
     <Compile Include="Assets\Scripts\Camera\CinemachineCameraCollisionChecker.cs" />
     <Compile Include="Assets\Scripts\Core\Data\CharacterData.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleActor.cs" />
     <Compile Include="Assets\Scripts\Characters\DeathOnStoryFlag.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleTutorialGuide.cs" />
     <Compile Include="Assets\Scripts\Core\Data\EnemyData.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SkillCategory.cs" />
     <Compile Include="Assets\Scripts\Characters\PlayerInteractor.cs" />
@@ -121,6 +128,7 @@
     <Compile Include="Assets\Scripts\Integration\StartBattleCommand.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Art\2D\Characters\KayKit_Skeletons_1.1_FREE\KayKit_Skeletons_1.1_FREE\License.txt" />
     <None Include="Assets\Art\3D\Environment\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Village\Sources\Shaders\PT_Buildings_Glass_PBR.shader" />

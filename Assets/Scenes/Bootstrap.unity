@@ -436,6 +436,54 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: musicVolume
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: hitSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: forestScenes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'hitSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 5cac7fb74f9cc9a439c56cfebaa21394, type: 3}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'hitSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b86d00cebe7df1347903915711d0b36f, type: 3}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'hitSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 340d6cc7be43fae46a5ce36ef34dac36, type: 3}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'hitSounds.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 5cac7fb74f9cc9a439c56cfebaa21394, type: 3}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'hitSounds.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b86d00cebe7df1347903915711d0b36f, type: 3}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'hitSounds.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 340d6cc7be43fae46a5ce36ef34dac36, type: 3}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: ignoredScenes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: villageScenes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847291056482739106, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
+      propertyPath: 'villageScenes.Array.data[0]'
+      value: Aether_Outpost
+      objectReference: {fileID: 0}
     - target: {fileID: 7821855392171276779, guid: 59c204b89b9d6cd4f81e1e0ef1c6eb88, type: 3}
       propertyPath: initialScene
       value: Forest_Road

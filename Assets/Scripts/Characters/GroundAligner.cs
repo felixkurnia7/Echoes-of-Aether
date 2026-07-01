@@ -58,11 +58,20 @@ public class GroundAligner : MonoBehaviour
         if (!TryGetGround(out RaycastHit hit))
             return;
 
+        // Snap height: use CharacterController.Move so the capsule stays in sync.
         if (snapToGround)
         {
-            Vector3 pos = transform.position;
-            pos.y = hit.point.y + groundOffset;
-            transform.position = pos;
+            if (TryGetComponent(out CharacterController cc) && cc.enabled)
+            {
+                CharacterGrounding.TrySnapToGround(
+                    cc, transform, groundMask, groundOffset, rayDistance, rayStartHeight);
+            }
+            else
+            {
+                Vector3 pos = transform.position;
+                pos.y = hit.point.y + groundOffset;
+                transform.position = pos;
+            }
         }
 
         if (alignToNormal)

@@ -20,6 +20,7 @@ MonoBehaviour:
   speed: 12
   luck: 3
   portrait: {fileID: 0}
+  battlePrefab: {fileID: 7089744123938765592, guid: 497727e8c9c51b04487338d2821d5332, type: 3}
   skillList:
   - {fileID: 11400000, guid: c943d62fe8481bd4392035be6288c3e0, type: 2}
   - {fileID: 11400000, guid: a9e1aa8ff99562a4690cad017c0f80c6, type: 2}

@@ -23,6 +23,10 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float gravity = -20f;
+    [Tooltip("Small constant downward velocity while grounded, just enough to keep the controller stuck to the ground.")]
+    [SerializeField] private float groundedStick = -2f;
+    [Tooltip("Cancel horizontal drift while standing still so the player doesn't slowly slide down slopes.")]
+    [SerializeField] private bool preventSlopeSlide = true;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private MovementMode movementMode = MovementMode.ReferenceTransform;
     [Tooltip("Stable basis for side-view input. Assign CameraRig_SideView when using a camera path.")]
@@ -66,9 +70,9 @@ public class PlayerController : MonoBehaviour
         if (direction.sqrMagnitude > 1f)
             direction.Normalize();
 
-        bool IsMoving = direction.sqrMagnitude > 0.01f;
+        bool isMoving = direction.sqrMagnitude > 0.01f;
 
-        if (IsMoving)
+        if (isMoving)
         {
             lastMoveDirection = direction;
             CurrentPlayerState = PlayerState.Move;
@@ -78,11 +82,39 @@ public class PlayerController : MonoBehaviour
             CurrentPlayerState = PlayerState.Idle;
         }
 
-        characterController.Move(direction * moveSpeed * Time.deltaTime);
-        ApplyGravity();
+        // Gravity: only accumulate while airborne. When grounded, keep just a
+        // small constant downward pull so the controller stays stuck to the
+        // ground without building up heavy downward speed.
+        if (characterController.isGrounded)
+        {
+            if (velocity.y < 0f)
+                velocity.y = groundedStick;
+        }
+        else
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        // Move horizontally and vertically in a single call - more stable on
+        // slopes than two separate Move() calls.
+        Vector3 motion = direction * moveSpeed;
+        motion.y = velocity.y;
+
+        Vector3 positionBeforeMove = transform.position;
+        characterController.Move(motion * Time.deltaTime);
+
+        // Anti-slide: while standing still on the ground, undo any horizontal
+        // drift the controller gained from sliding down the slope.
+        if (preventSlopeSlide && !isMoving && characterController.isGrounded)
+        {
+            Vector3 corrected = transform.position;
+            corrected.x = positionBeforeMove.x;
+            corrected.z = positionBeforeMove.z;
+            transform.position = corrected;
+        }
 
         if (characterVisual != null)
-            characterVisual.SetMovement(direction, IsMoving ? moveSpeed : 0f);
+            characterVisual.SetMovement(direction, isMoving ? moveSpeed : 0f);
     }
 
     Vector3 GetMoveDirection(Vector2 input)
@@ -140,15 +172,6 @@ public class PlayerController : MonoBehaviour
         return direction.sqrMagnitude > 1f ? direction.normalized : direction;
     }
 
-    void ApplyGravity()
-    {
-        if (characterController.isGrounded && velocity.y < 0f)
-            velocity.y = -2f;
-
-        velocity.y += gravity * Time.deltaTime;
-        characterController.Move(velocity * Time.deltaTime);
-    }
-
     void SyncStateFromGameManager()
     {
         if (GameManager.Instance == null) return;
@@ -183,5 +206,11 @@ public class PlayerController : MonoBehaviour
     public void SetPlayerState(PlayerState state)
     {
         CurrentPlayerState = state;
+    }
+
+    /// <summary>Clears vertical velocity after a teleport or cutscene handoff.</summary>
+    public void ResetMovementState()
+    {
+        velocity = Vector3.zero;
     }
 }

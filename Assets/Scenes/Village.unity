@@ -3865,11 +3865,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1034327502380899424, guid: aab66de36575a3c4f91090c4945c1234, type: 3}
   m_PrefabInstance: {fileID: 264199380}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &275746173 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-  m_PrefabInstance: {fileID: 1409890535670360426}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &282135849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11533,8 +11528,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 805591796}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18734112, y: 0, z: 0, w: 0.9822949}
-  m_LocalPosition: {x: 66.7, y: 28.11, z: 33}
+  m_LocalRotation: {x: 0.24878111, y: 0, z: 0, w: 0.96855974}
+  m_LocalPosition: {x: 66.7, y: 26.11, z: 40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27078,11 +27073,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EchoesOfAether.Camera.CameraPathFollowerRig
   path: {fileID: 1839882658}
-  player: {fileID: 275746173}
+  player: {fileID: 0}
   projection: 1
   worldOffset: {x: 0, y: 0, z: 0}
   moveSpeed: 25
   alignRotationToPath: 1
+  rotationSmoothing: 6
+  rebuildEveryFrame: 0
   drawGizmos: 1
   gizmoRigColor: {r: 0.25, g: 1, b: 0.35, a: 0.95}
 --- !u!4 &2108566186
@@ -27653,67 +27650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a334fe2ffb574b3583ff3b18b4792d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Flowchart
---- !u!1001 &1409890535670360426
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1488982522444016802, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 805591798}
-    - target: {fileID: 1620094726070909138, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 66.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 22.11
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551640073453083017, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 44f6bb7ec9aa9f04ab4306bcd39a78ad, type: 3}
 --- !u!1001 &2275226564480820333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27857,6 +27793,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8230678812294807632, guid: 0125b46e83e3c0d46873510369cb6338, type: 3}
     - {fileID: 5786113507492791764, guid: 0125b46e83e3c0d46873510369cb6338, type: 3}
+    - {fileID: 2226731955506626091, guid: 0125b46e83e3c0d46873510369cb6338, type: 3}
+    - {fileID: 2780943175600114954, guid: 0125b46e83e3c0d46873510369cb6338, type: 3}
+    - {fileID: 8489370331567666253, guid: 0125b46e83e3c0d46873510369cb6338, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -27926,7 +27865,7 @@ PrefabInstance:
     - target: {fileID: 105219324732001413, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: Target.LookAtTarget
       value: 
-      objectReference: {fileID: 275746173}
+      objectReference: {fileID: 0}
     - target: {fileID: 105219324732001413, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
@@ -27941,19 +27880,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5581434765141225941, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 28.11
+      value: 26.11
       objectReference: {fileID: 0}
     - target: {fileID: 5581434765141225941, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 33
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5581434765141225941, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9822949
+      value: 0.96855974
       objectReference: {fileID: 0}
     - target: {fileID: 5581434765141225941, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.18734112
+      value: 0.24878111
       objectReference: {fileID: 0}
     - target: {fileID: 5581434765141225941, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
       propertyPath: m_LocalRotation.y
@@ -28082,7 +28021,7 @@ MonoBehaviour:
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
-  itemId: 34
+  itemId: 42
   blockName: CS_LeaveVillage
   description: 
   eventHandler: {fileID: 0}
@@ -28103,7 +28042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3315ad2ebb85443909a1203d56d9344e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Wait
-  itemId: 36
+  itemId: 44
   indentLevel: 0
   _duration:
     floatRef: {fileID: 0}
@@ -28121,7 +28060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 35
+  itemId: 43
   indentLevel: 0
   storyText: The elder points toward the forest path...
   description: 
@@ -28135,6 +28074,7 @@ MonoBehaviour:
   waitForClick: 1
   stopVoiceover: 1
   waitForVO: 0
+  dialogStyle: 0
   setSayDialog: {fileID: 0}
 --- !u!114 &8639938625700359231
 MonoBehaviour:
@@ -28148,7 +28088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Call
-  itemId: 38
+  itemId: 45
   indentLevel: 0
   targetFlowchart: {fileID: 0}
   targetBlock: {fileID: 8639938625700359228}
@@ -28169,7 +28109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c8e1f23b5d64789a0b1c2d3e4f5a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CallGameFlow
-  itemId: 39
+  itemId: 46
   indentLevel: 0
   action: 0
 --- !u!114 &8639938625700359233
@@ -28184,7 +28124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c8e1f23b5d64789a0b1c2d3e4f5a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CallGameFlow
-  itemId: 40
+  itemId: 47
   indentLevel: 0
   action: 2
 --- !u!114 &8639938625700359234
@@ -28199,7 +28139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb77d0ce495044f6e9feb91b31798e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.SetVariable
-  itemId: 41
+  itemId: 48
   indentLevel: 0
   anyVar:
     variable: {fileID: 2275226564480820336}
@@ -28361,7 +28301,6 @@ SceneRoots:
   - {fileID: 805591799}
   - {fileID: 994762315}
   - {fileID: 786835407}
-  - {fileID: 1409890535670360426}
   - {fileID: 2584151082648106685}
   - {fileID: 364716374}
   - {fileID: 1141368314}

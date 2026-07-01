@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e19d6095a2d1d4fa93852fcdadf91d, type: 3}
   m_Name: talk_to_mage
   m_EditorClassIdentifier: Assembly-CSharp::SubObjectiveData
-  id: 
-  text: 
+  id: talk_to_mage
+  text: Talk to Mage

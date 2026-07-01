@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6969859d2359897479a9033f79da2593, type: 3}
+  m_Name: Enemy_Skeleton_Warrior
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  characterData: {fileID: 11400000, guid: e96424f5e136c0e488e18b8e53e7388d, type: 2}
+  healThreshold: 0.3
+  healSkill: {fileID: 11400000, guid: 2617fcb5f252b914a82d4da19a4d4122, type: 2}

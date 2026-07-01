@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Talk to Knight
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveData
   id: talk_to_knight
-  title: 
+  title: Talk to Knight in the Aether Outpost
   subObjectives:
   - {fileID: 11400000, guid: 9cd9db172325acd4e82b6f225332b682, type: 2}
   - {fileID: 11400000, guid: cb9b1abb2e3a3d644bf6fe55b0fd7af0, type: 2}

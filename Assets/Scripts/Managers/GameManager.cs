@@ -78,13 +78,13 @@ public class GameManager : MonoBehaviour
         StartBattle(enemies, null);
     }
 
-    public void StartBattle(EnemyData[] enemies, string victoryFlag, SubObjectiveData victorySubObjective = null)
+    public void StartBattle(EnemyData[] enemies, string victoryFlag, SubObjectiveData victorySubObjective = null, bool battleTutorial = false)
     {
         if (enemies == null || enemies.Length == 0) return;
 
         string returnScene = SceneManager.GetActiveScene().name;
 
-        BattleSessionData.SetSession(defaultPlayerCharacter, enemies, returnScene, victoryFlag, victorySubObjective);
+        BattleSessionData.SetSession(defaultPlayerCharacter, enemies, returnScene, victoryFlag, victorySubObjective, battleTutorial);
         SetState(GameState.Battle);
         GameEvents.RaiseBattleStart();
         LoadScene(battleSceneName);

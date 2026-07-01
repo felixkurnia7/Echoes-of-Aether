@@ -17,6 +17,10 @@ public class CharacterData : ScriptableObject
     [Header("Presentation")]
     public Sprite portrait;
 
+    [Header("Battle")]
+    [Tooltip("Prefab (with a BattleActor) spawned to represent this character in the Battle scene. Leave empty to fall back to a pre-placed actor in the scene.")]
+    public GameObject battlePrefab;
+
     [Header("Skills")]
     public SkillData[] skillList;
 }
