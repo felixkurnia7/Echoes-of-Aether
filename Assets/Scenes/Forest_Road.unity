@@ -482,1101 +482,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aca70807e70b1444099e6532a8399904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCutsceneMover
---- !u!1 &214255719
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 214255726}
-  - component: {fileID: 214255725}
-  - component: {fileID: 214255724}
-  - component: {fileID: 214255723}
-  - component: {fileID: 214255721}
-  - component: {fileID: 214255720}
-  - component: {fileID: 214255729}
-  - component: {fileID: 214255728}
-  - component: {fileID: 214255730}
-  - component: {fileID: 214255731}
-  - component: {fileID: 214255732}
-  - component: {fileID: 214255734}
-  - component: {fileID: 214255733}
-  - component: {fileID: 214255735}
-  - component: {fileID: 214255739}
-  - component: {fileID: 214255740}
-  - component: {fileID: 214255742}
-  - component: {fileID: 214255741}
-  - component: {fileID: 214255743}
-  - component: {fileID: 214255744}
-  - component: {fileID: 214255745}
-  - component: {fileID: 214255746}
-  - component: {fileID: 214255748}
-  - component: {fileID: 214255747}
-  - component: {fileID: 214255749}
-  - component: {fileID: 214255750}
-  - component: {fileID: 214255751}
-  - component: {fileID: 214255752}
-  - component: {fileID: 214255758}
-  - component: {fileID: 214255757}
-  - component: {fileID: 214255756}
-  - component: {fileID: 214255755}
-  - component: {fileID: 214255754}
-  - component: {fileID: 214255753}
-  - component: {fileID: 214255760}
-  - component: {fileID: 214255761}
-  - component: {fileID: 214255759}
-  - component: {fileID: 214255762}
-  - component: {fileID: 214255764}
-  - component: {fileID: 214255763}
-  - component: {fileID: 214255765}
-  m_Layer: 0
-  m_Name: FC_Intro
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &214255720
+--- !u!114 &214255725 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1584127873833323105, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+  m_PrefabInstance: {fileID: 3593407600884824624}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 3
-  indentLevel: 0
-  storyText: That's right.
-  description: 
-  character: {fileID: 4938546546932772738}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255721
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 2
-  indentLevel: 0
-  storyText: Finally. You must be the adventurer sent by the guild.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255723
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2f6487d21a03404cb21b245f0242e79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.GameStarted
-  parentBlock: {fileID: 214255724}
-  suppressBlockAutoSelect: 0
-  waitForFrames: 1
---- !u!114 &214255724
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Block
-  nodeRect:
-    serializedVersion: 2
-    x: 251.13637
-    y: 120.93617
-    width: 97.79
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 0
-  blockName: CS_Intro
-  description: 
-  eventHandler: {fileID: 214255723}
-  commandList:
-  - {fileID: 214255731}
-  - {fileID: 214255743}
-  - {fileID: 214255721}
-  - {fileID: 214255720}
-  - {fileID: 214255729}
-  - {fileID: 214255728}
-  - {fileID: 214255732}
-  - {fileID: 214255730}
-  - {fileID: 214255735}
-  - {fileID: 214255744}
-  suppressAllAutoSelections: 0
---- !u!114 &214255725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a334fe2ffb574b3583ff3b18b4792d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Flowchart
-  version: 1
-  scrollPos: {x: 54.350452, y: -61.499565}
-  variablesScrollPos: {x: 0, y: 0}
-  variablesExpanded: 1
-  blockViewHeight: 405
-  zoom: 0.94000006
-  scrollViewRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  selectedBlocks:
-  - {fileID: 214255742}
-  selectedCommands:
-  - {fileID: 214255741}
-  variables: []
-  description: Scenario Introduction
-  stepPause: 0
-  colorCommands: 1
-  hideComponents: 1
-  saveSelection: 1
-  localizationId: 
-  showLineNumbers: 0
-  hideCommands: []
-  luaEnvironment: {fileID: 0}
-  luaBindingName: flowchart
---- !u!4 &214255726
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -42.96884, y: 1.88604, z: 87.05369}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &214255728
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 5
-  indentLevel: 0
-  storyText: Follow me. The outpost is just ahead.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255729
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 4
-  indentLevel: 0
-  storyText: Good. We don't have much time.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255730
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c4d5e6f708192030a2b3c4d5e6f7023, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetObjectiveCommand
-  itemId: 7
-  indentLevel: 0
-  mode: 0
-  objectiveData: {fileID: 11400000, guid: a2e3e0ff3439c2e45b09e915c9b385cd, type: 2}
-  subObjectiveData: {fileID: 0}
-  includeSubObjectives: 0
---- !u!114 &214255731
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6dd8d3a780f4d1ea772e3daf10c372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.FadeUI
-  itemId: 8
-  indentLevel: 0
-  targetObjects:
-  - {fileID: 1568635564}
-  tweenType: 2
-  waitUntilFinished:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  duration:
-    floatRef: {fileID: 0}
-    floatVal: 2
-  fadeMode: 0
-  targetColor:
-    colorRef: {fileID: 0}
-    colorVal: {r: 1, g: 1, b: 1, a: 1}
-  targetAlpha:
-    floatRef: {fileID: 0}
-    floatVal: 0
---- !u!114 &214255732
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f8d4b6c1a3e49f7b5c9d2e8a4f1b6c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShowTutorialPopupCommand
-  itemId: 9
-  indentLevel: 0
-  title: INFO
-  message: Move using WASD or Arrow Keys
-  okButtonLabel: OK
-  waitUntilClosed: 1
---- !u!114 &214255733
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 11
-  indentLevel: 0
-  storyText: Before we continue, take a look at that sign.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255734
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Block
-  nodeRect:
-    serializedVersion: 2
-    x: 221.11372
-    y: 179.211
-    width: 129.73001
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 10
-  blockName: CS_Signboard
-  description: 
-  eventHandler: {fileID: 0}
-  commandList:
-  - {fileID: 214255733}
-  - {fileID: 214255740}
-  - {fileID: 214255739}
-  suppressAllAutoSelections: 0
---- !u!114 &214255735
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e6f708192a3b4c50a2b3c4d5e6f7045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ControlNpcCommand
-  itemId: 12
-  indentLevel: 0
-  target: {fileID: 5866666020849455326}
-  action: 0
-  waitUntilArrived: 0
---- !u!114 &214255739
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f8d4b6c1a3e49f7b5c9d2e8a4f1b6c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShowTutorialPopupCommand
-  itemId: 13
-  indentLevel: 0
-  title: INFO
-  message: Press [SPACE] to interact with object.
-  okButtonLabel: OK
-  waitUntilClosed: 1
---- !u!114 &214255740
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c4d5e6f708192030a2b3c4d5e6f7023, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetObjectiveCommand
-  itemId: 14
-  indentLevel: 0
-  mode: 3
-  objectiveData: {fileID: 0}
-  subObjectiveData: {fileID: 11400000, guid: c7e9fdcb846f5984483c585c8b86d87a, type: 2}
-  includeSubObjectives: 0
---- !u!114 &214255741
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8192a3b4c5d6e7f80a2b3c4d5e6f7078, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StartBattleCommand
-  itemId: 16
-  indentLevel: 0
-  enemies: []
-  enemy: {fileID: 11400000, guid: 5ffb96db2c7af9b419cc97b21aff7585, type: 2}
-  victoryFlag: bear_defeated
-  completeOnVictory: {fileID: 11400000, guid: 73a56eb13a143f34487b163f046a4b60, type: 2}
-  battleTutorial: 1
---- !u!114 &214255742
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Block
-  nodeRect:
-    serializedVersion: 2
-    x: 219.01263
-    y: 237.67688
-    width: 143.69
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 15
-  blockName: CS_BearAmbush
-  description: 
-  eventHandler: {fileID: 0}
-  commandList:
-  - {fileID: 214255750}
-  - {fileID: 214255745}
-  - {fileID: 214255746}
-  - {fileID: 214255748}
-  - {fileID: 214255747}
-  - {fileID: 214255749}
-  - {fileID: 214255765}
-  - {fileID: 214255741}
-  suppressAllAutoSelections: 0
---- !u!114 &214255743
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92a3b4c5d6e7f8090a2b3c4d5e6f7089, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StopIfStoryFlagCommand
-  itemId: 17
-  indentLevel: 0
-  storyFlag: bear_defeated
-  stopWhenValueIs: 1
---- !u!114 &214255744
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e6f708192a3b4c50a2b3c4d5e6f7045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ControlNpcCommand
-  itemId: 18
-  indentLevel: 0
-  target: {fileID: 208311037}
-  action: 0
-  waitUntilArrived: 0
---- !u!114 &214255745
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c4d5e6f708192030a2b3c4d5e6f7023, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetObjectiveCommand
-  itemId: 19
-  indentLevel: 0
-  mode: 3
-  objectiveData: {fileID: 0}
-  subObjectiveData: {fileID: 11400000, guid: 73a56eb13a143f34487b163f046a4b60, type: 2}
-  includeSubObjectives: 0
---- !u!114 &214255746
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 20
-  indentLevel: 0
-  storyText: Grrrr...
-  description: 
-  character: {fileID: 3803772386860211353}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255747
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 22
-  indentLevel: 0
-  storyText: Stay calm.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255748
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 21
-  indentLevel: 0
-  storyText: Looks like trouble.
-  description: 
-  character: {fileID: 4938546546932772738}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255749
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 23
-  indentLevel: 0
-  storyText: Let's see how well you fight.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255750
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e6f708192a3b4c50a2b3c4d5e6f7045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ControlNpcCommand
-  itemId: 24
-  indentLevel: 0
-  target: {fileID: 3803772386860211354}
-  action: 0
-  waitUntilArrived: 1
---- !u!114 &214255751
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Block
-  nodeRect:
-    serializedVersion: 2
-    x: 206.45241
-    y: 294.78513
-    width: 176.69
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 25
-  blockName: CS_JourneyToOutpost
-  description: 
-  eventHandler: {fileID: 0}
-  commandList:
-  - {fileID: 214255752}
-  - {fileID: 214255758}
-  - {fileID: 214255757}
-  - {fileID: 214255756}
-  - {fileID: 214255755}
-  - {fileID: 214255754}
-  - {fileID: 214255753}
-  suppressAllAutoSelections: 0
---- !u!114 &214255752
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 26
-  indentLevel: 0
-  storyText: So why was the guild looking for help?
-  description: 
-  character: {fileID: 4938546546932772738}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255753
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 32
-  indentLevel: 0
-  storyText: I do.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255754
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 31
-  indentLevel: 0
-  storyText: And you think they're connected?
-  description: 
-  character: {fileID: 4938546546932772738}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255755
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 30
-  indentLevel: 0
-  storyText: Since then, monsters have become unusually aggressive.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255756
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 29
-  indentLevel: 0
-  storyText: Three nights ago.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255757
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 28
-  indentLevel: 0
-  storyText: Stolen?
-  description: 
-  character: {fileID: 4938546546932772738}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255758
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 27
-  indentLevel: 0
-  storyText: Our Aether Crystal was stolen.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255759
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 35
-  indentLevel: 0
-  storyText: Go pass the bridge to the Aether Oupost.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255760
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Block
-  nodeRect:
-    serializedVersion: 2
-    x: 240.73618
-    y: 353.49332
-    width: 103.22
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 33
-  blockName: CS_Outro
-  description: 
-  eventHandler: {fileID: 0}
-  commandList:
-  - {fileID: 214255761}
-  - {fileID: 214255759}
-  - {fileID: 214255762}
-  - {fileID: 214255763}
-  - {fileID: 214255764}
-  suppressAllAutoSelections: 0
---- !u!114 &214255761
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 34
-  indentLevel: 0
-  storyText: There it is.
-  description: 
-  character: {fileID: 1436792431506989545}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  dialogStyle: 1
-  setSayDialog: {fileID: 0}
---- !u!114 &214255762
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c4d5e6f708192030a2b3c4d5e6f7023, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetObjectiveCommand
-  itemId: 36
-  indentLevel: 0
-  mode: 1
-  objectiveData: {fileID: 11400000, guid: a2e3e0ff3439c2e45b09e915c9b385cd, type: 2}
-  subObjectiveData: {fileID: 0}
-  includeSubObjectives: 1
---- !u!114 &214255763
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6dd8d3a780f4d1ea772e3daf10c372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.FadeUI
-  itemId: 38
-  indentLevel: 0
-  targetObjects:
-  - {fileID: 1568635564}
-  tweenType: 2
-  waitUntilFinished:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  duration:
-    floatRef: {fileID: 0}
-    floatVal: 1
-  fadeMode: 0
-  targetColor:
-    colorRef: {fileID: 0}
-    colorVal: {r: 1, g: 1, b: 1, a: 1}
-  targetAlpha:
-    floatRef: {fileID: 0}
-    floatVal: 1
---- !u!114 &214255764
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00d03ae0919f04264b018681ed534177, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.LoadScene
-  itemId: 37
-  indentLevel: 0
-  _sceneName:
-    stringRef: {fileID: 0}
-    stringVal: Aether_Outpost
-  loadingImage: {fileID: 0}
-  sceneNameOLD: 
---- !u!114 &214255765
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214255719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6dd8d3a780f4d1ea772e3daf10c372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.FadeUI
-  itemId: 39
-  indentLevel: 0
-  targetObjects:
-  - {fileID: 1568635564}
-  tweenType: 2
-  waitUntilFinished:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  duration:
-    floatRef: {fileID: 0}
-    floatVal: 2
-  fadeMode: 0
-  targetColor:
-    colorRef: {fileID: 0}
-    colorVal: {r: 1, g: 1, b: 1, a: 1}
-  targetAlpha:
-    floatRef: {fileID: 0}
-    floatVal: 1
 --- !u!1 &227735218
 GameObject:
   m_ObjectHideFlags: 0
@@ -5666,6 +4582,159 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5581434765141225941, guid: 2bd259d1756ea8c4e91bcd099abc02df, type: 3}
   m_PrefabInstance: {fileID: 2584151082648106685}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3593407600884824624
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 133583045175887607, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 4938546546932772738}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -42.96884
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.88604
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 87.05369
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 806229708558453449, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 946957167437572607, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 983743287213197972, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: 'targetObjects.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1568635564}
+    - target: {fileID: 1708404248167808877, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 208311037}
+    - target: {fileID: 1766169664568411646, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 1977889954013242992, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 4938546546932772738}
+    - target: {fileID: 2178885160348033628, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 2479466723214547894, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 4938546546932772738}
+    - target: {fileID: 2481337671859121255, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 4938546546932772738}
+    - target: {fileID: 2599314265130211684, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 3068330820116635012, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 3156728973895659721, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 3803772386860211354}
+    - target: {fileID: 3282698400258337542, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 3880089818639906346, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: 'targetObjects.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1568635564}
+    - target: {fileID: 4229648855764450425, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 4938546546932772738}
+    - target: {fileID: 5185063980950448459, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 5511173120336914246, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 5963773025355361020, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 5976399133166875354, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 5866666020849455326}
+    - target: {fileID: 6139956808704743517, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: 'targetObjects.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1568635564}
+    - target: {fileID: 6656208664587442443, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 7158596957237105671, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 7853052223780455010, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 1436792431506989545}
+    - target: {fileID: 8274176092330551996, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: m_Name
+      value: FC_Intro
+      objectReference: {fileID: 0}
+    - target: {fileID: 8347494935321079659, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 3803772386860211353}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e163f6f3b12afd9448d75c4af5873ccb, type: 3}
 --- !u!1001 &3803772386860211351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5929,7 +4998,7 @@ SceneRoots:
   - {fileID: 856395460}
   - {fileID: 589485121}
   - {fileID: 2113053680}
-  - {fileID: 214255726}
+  - {fileID: 3593407600884824624}
   - {fileID: 1568635568}
   - {fileID: 1446600552}
   - {fileID: 1730713396}

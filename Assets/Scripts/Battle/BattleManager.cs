@@ -54,6 +54,8 @@ public class BattleManager : MonoBehaviour
     readonly List<Combatant> enemies = new();
 
     TMP_Text messageLabel;
+    CanvasGroup messageGroup;
+    Coroutine messageFadeRoutine;
     TMP_Text playerStatLabel;
     Transform actionRow;
     readonly List<Button> actionButtons = new();
@@ -72,6 +74,10 @@ public class BattleManager : MonoBehaviour
     static readonly Color EnemyRowColor = new Color(0.06f, 0.07f, 0.1f, 0.55f);
     static readonly Color EnemyTargetColor = new Color(0.22f, 0.14f, 0.1f, 0.92f);
     static readonly Color EnemySelectedColor = new Color(0.35f, 0.22f, 0.08f, 0.95f);
+
+    const float MessageHoldDuration = 2f;
+    const float MessageFadeDuration = 0.65f;
+    const float MessageEndHoldDuration = 2.5f;
 
     void Start()
     {
@@ -373,6 +379,9 @@ public class BattleManager : MonoBehaviour
 
         SetButtonsInteractable(false);
 
+        if (chosenAction == PlayerAction.Skill && IsSelfHealSkill(chosenSkill))
+            requiresTarget = false;
+
         if (RequiresEnemyTargetSelection())
         {
             SetMessage("Select an enemy to target.");
@@ -426,6 +435,9 @@ public class BattleManager : MonoBehaviour
         if (!requiresTarget)
             return false;
 
+        if (chosenAction == PlayerAction.Skill && IsSelfHealSkill(chosenSkill))
+            return false;
+
         return CountAliveEnemies() > 1;
     }
 
@@ -434,7 +446,7 @@ public class BattleManager : MonoBehaviour
         if (skill == null)
             return false;
 
-        if (skill.category == SkillCategory.Support || skill.targetType == SkillTargetType.Self)
+        if (IsSelfHealSkill(skill))
             return false;
 
         return skill.targetType == SkillTargetType.Enemy;
@@ -457,7 +469,7 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        if (chosenSkill.category == SkillCategory.Support || chosenSkill.targetType == SkillTargetType.Self)
+        if (IsSelfHealSkill(chosenSkill))
         {
             int heal = Mathf.Max(1, chosenSkill.power);
             player.runtime.Heal(heal);
@@ -473,6 +485,10 @@ public class BattleManager : MonoBehaviour
                 SetMessage($"You cast {skill.skillName} on {target.Name} for {dmg} damage!");
                 ReactToDamage(target);
             });
+        }
+        else
+        {
+            SetMessage("No valid target for that skill.");
         }
     }
 
@@ -513,7 +529,7 @@ public class BattleManager : MonoBehaviour
     {
         SetButtonsInteractable(false);
         SetTargetButtonsInteractable(false);
-        SetMessage(victory ? "Victory!" : "You were defeated...");
+        SetMessage(victory ? "Victory!" : "You were defeated...", holdDuration: MessageEndHoldDuration);
 
         if (victory && battleTutorial != null)
             yield return battleTutorial.OnVictory();
@@ -573,7 +589,7 @@ public class BattleManager : MonoBehaviour
 
         chosenAction = PlayerAction.Skill;
         chosenSkill = skill;
-        requiresTarget = NeedsEnemyTarget(skill) && CountAliveEnemies() > 0;
+        requiresTarget = !IsSelfHealSkill(skill) && NeedsEnemyTarget(skill) && CountAliveEnemies() > 0;
         actionChosen = true;
     }
 
@@ -620,7 +636,10 @@ public class BattleManager : MonoBehaviour
             enemy.targetButton.interactable = value && alive;
 
             if (enemy.targetBackground != null)
+            {
                 enemy.targetBackground.color = value && alive ? EnemyTargetColor : EnemyRowColor;
+                enemy.targetBackground.raycastTarget = value && alive;
+            }
         }
     }
 
@@ -705,23 +724,76 @@ public class BattleManager : MonoBehaviour
         };
     }
 
-    static bool IsHealSkill(SkillData skill)
+    static bool IsSelfHealSkill(SkillData skill)
     {
         if (skill == null)
             return false;
 
-        return skill.category == SkillCategory.Support || skill.targetType == SkillTargetType.Self;
+        if (skill.category == SkillCategory.Support)
+            return true;
+
+        return skill.targetType == SkillTargetType.Self || skill.targetType == SkillTargetType.Ally;
     }
+
+    static bool IsHealSkill(SkillData skill) => IsSelfHealSkill(skill);
 
     static bool IsOffensiveSkill(SkillData skill)
     {
         return skill != null && !IsHealSkill(skill);
     }
 
-    void SetMessage(string text)
+    void SetMessage(string text, float holdDuration = MessageHoldDuration, bool autoFade = true)
     {
-        if (messageLabel != null)
-            messageLabel.text = text;
+        if (messageFadeRoutine != null)
+        {
+            StopCoroutine(messageFadeRoutine);
+            messageFadeRoutine = null;
+        }
+
+        if (messageLabel == null)
+            return;
+
+        if (string.IsNullOrEmpty(text))
+        {
+            messageLabel.text = string.Empty;
+            if (messageGroup != null)
+                messageGroup.alpha = 0f;
+            return;
+        }
+
+        messageLabel.text = text;
+
+        if (messageGroup != null)
+            messageGroup.alpha = 1f;
+
+        if (autoFade)
+            messageFadeRoutine = StartCoroutine(FadeOutMessage(holdDuration));
+    }
+
+    IEnumerator FadeOutMessage(float holdDuration)
+    {
+        yield return new WaitForSeconds(holdDuration);
+
+        if (messageGroup == null)
+        {
+            if (messageLabel != null)
+                messageLabel.text = string.Empty;
+            messageFadeRoutine = null;
+            yield break;
+        }
+
+        float startAlpha = messageGroup.alpha;
+        float elapsed = 0f;
+        while (elapsed < MessageFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            messageGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsed / MessageFadeDuration);
+            yield return null;
+        }
+
+        messageGroup.alpha = 0f;
+        messageLabel.text = string.Empty;
+        messageFadeRoutine = null;
     }
 
     void RefreshStats()
@@ -770,14 +842,17 @@ public class BattleManager : MonoBehaviour
         enemyLayout.childForceExpandWidth = true;
         AddFitter(enemyColumn.gameObject);
 
+        float enemyRowHeight = enemies.Count > 3 ? 60f : 78f;
         foreach (Combatant enemy in enemies)
-            CreateEnemyTargetRow(enemyColumn, enemy);
+            CreateEnemyTargetRow(enemyColumn, enemy, enemyRowHeight);
 
         // Message line (center)
         var messagePanel = CreatePanel(canvas.transform, "Message",
             new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
             new Vector2(0f, 120f), new Vector2(1100f, 80f));
         messagePanel.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.55f);
+        messageGroup = messagePanel.gameObject.AddComponent<CanvasGroup>();
+        messageGroup.alpha = 0f;
         messageLabel = CreateText(messagePanel, "MessageText", 34f, TextAlignmentOptions.Center);
         StretchToParent(messageLabel.rectTransform);
 
@@ -823,14 +898,14 @@ public class BattleManager : MonoBehaviour
         RefreshStats();
     }
 
-    void CreateEnemyTargetRow(Transform parent, Combatant enemy)
+    void CreateEnemyTargetRow(Transform parent, Combatant enemy, float rowHeight)
     {
         var go = new GameObject(enemy.Name, typeof(RectTransform), typeof(Image), typeof(Button));
         go.transform.SetParent(parent, false);
 
         var image = go.GetComponent<Image>();
         image.color = EnemyRowColor;
-        image.raycastTarget = true;
+        image.raycastTarget = false;
 
         var button = go.GetComponent<Button>();
         button.interactable = false;
@@ -844,7 +919,7 @@ public class BattleManager : MonoBehaviour
         button.colors = colors;
 
         var le = go.AddComponent<LayoutElement>();
-        le.minHeight = 78f;
+        le.minHeight = rowHeight;
 
         enemy.targetButton = button;
         enemy.targetBackground = image;

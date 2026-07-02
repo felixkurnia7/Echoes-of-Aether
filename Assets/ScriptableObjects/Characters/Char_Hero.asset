@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ffe278ab5a60d449bbd86a8c04cb35, type: 3}
   m_Name: Char_Hero
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  characterName: Aether
+  characterName: Player
   maxHP: 100
   maxMP: 30
   attack: 12

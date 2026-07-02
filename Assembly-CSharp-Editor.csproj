@@ -70,10 +70,10 @@
     <Compile Include="Assets\Scripts\Characters\Editor\PlayerCutsceneMoverEditor.cs" />
     <Compile Include="Assets\Scripts\Characters\Editor\NPCWalkerEditor.cs" />
     <Compile Include="Assets\Scripts\Characters\Editor\MoverEditorUtil.cs" />
-    <Compile Include="Assets\Polytope Studio\Welcome_Screen\Editor\PT_Welcome_Screen.cs" />
     <Compile Include="Assets\Scripts\Editor\BubbleDialogBuilder.cs" />
     <Compile Include="Assets\Scripts\Characters\Editor\MonsterWalkerEditor.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraPath\Editor\CameraPathEditor.cs" />
+    <Compile Include="Assets\Resources\Polytope Studio\Welcome_Screen\Editor\PT_Welcome_Screen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\PackageCache\com.unity.collab-proxy@e566cd3e7623\Lib\Editor\Localization\cm-help.zh-Hans.txt" />
